@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Jam'iyyah Tholabah</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fefcf5;
+            color: #1e2a3a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        /* Pattern background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#f0eef7 1.2px, transparent 1.2px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Dark Mode */
+        body.dark-theme {
+            background-color: #121212;
+            color: #f0f0f0;
+        }
+        body.dark-theme::before {
+            background-image: radial-gradient(#2a2a3a 1.2px, transparent 1.2px);
+        }
+        body.dark-theme .card {
+            background-color: #1e1e2f;
+            border: 1px solid #2c2c3a;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3);
+        }
+        body.dark-theme .form-control {
+            background-color: #2a2a3a;
+            border-color: #3a3a4a;
+            color: #ffffff;
+        }
+        body.dark-theme .form-control:focus {
+            background-color: #2a2a3a;
+            border-color: #a29bfe;
+            box-shadow: 0 0 0 4px rgba(162, 155, 254, 0.2);
+        }
+        body.dark-theme .input-icon,
+        body.dark-theme .toggle-pwd {
+            color: #9a9ac0;
+        }
+        body.dark-theme .form-label {
+            color: #e0e0e0;
+        }
+        body.dark-theme .text-muted-soft {
+            color: #b0b0c0;
+        }
+        body.dark-theme .link-pastel {
+            color: #b8b5ff;
+        }
+        body.dark-theme .link-pastel:hover {
+            color: #d9c8ff;
+        }
+        body.dark-theme footer {
+            background-color: #0a0a12;
+            border-top-color: #2a2a3a;
+            color: #c0c0d0;
+        }
+        body.dark-theme .btn-primary-pastel {
+            background: linear-gradient(105deg, #7a6ecc, #9a8eec);
+        }
+        body.dark-theme .alert-pastel {
+            background-color: #2a1a2a;
+            border-left-color: #ff9eb5;
+            color: #ffb8c5;
+        }
+
+        /* Main container - flex grow to push footer down */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        /* Card */
+        .card {
+            border: none;
+            border-radius: 2rem;
+            background: white;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.08), 0 8px 18px rgba(0, 0, 0, 0.02);
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 480px;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 50px -18px rgba(0, 0, 0, 0.12);
+        }
+        .card-body {
+            padding: 2.5rem 2rem;
+        }
+
+        /* Brand */
+        .brand-icon {
+            font-size: 3.2rem;
+            background: linear-gradient(145deg, #b8b5ff, #d9c8ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        h2 {
+            font-weight: 700;
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, #7c6ee7, #b48eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .text-muted-soft {
+            color: #8d8ba7;
+            font-size: 0.9rem;
+        }
+
+        /* Input */
+        .form-label {
+            font-weight: 500;
+            color: #4a4a6a;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .input-group-custom {
+            position: relative;
+        }
+        .form-control {
+            border: 1.5px solid #edeef5;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem 0.8rem 2.6rem;
+            font-size: 0.95rem;
+            background-color: #fefefe;
+            transition: all 0.2s;
+            color: #1f1b3a;
+        }
+        .form-control:focus {
+            border-color: #c7b9ff;
+            box-shadow: 0 0 0 4px rgba(183, 181, 255, 0.2);
+            outline: none;
+        }
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b1adcf;
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .toggle-pwd {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #b1adcf;
+            cursor: pointer;
+        }
+
+        /* Checkbox */
+        .form-check-input {
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 0.35rem;
+            border: 1.8px solid #dbd8f0;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .form-check-input:checked {
+            background-color: #a29bfe;
+            border-color: #a29bfe;
+        }
+        .form-check-label {
+            color: #5a5a7a;
+            font-size: 0.85rem;
+        }
+
+        /* Button */
+        .btn-primary-pastel {
+            background: linear-gradient(105deg, #a29bfe, #b5aeff);
+            border: none;
+            border-radius: 2rem;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            color: white;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+        }
+        .btn-primary-pastel:hover {
+            background: linear-gradient(105deg, #9289f5, #a49bff);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px -8px rgba(162, 155, 254, 0.5);
+        }
+
+        /* Alert */
+        .alert-pastel {
+            background-color: #ffe8f0;
+            border-left: 4px solid #ff9eb5;
+            color: #b13e5c;
+            border-radius: 1rem;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: fadeSlideDown 0.3s ease;
+        }
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loading */
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        .spinner-sm {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Footer - sekarang di bawah */
+        footer {
+            background: #faf9fe;
+            border-top: 1px solid #edeef2;
+            padding: 1.2rem 0;
+            margin-top: auto;
+            color: #6f6b8a;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        footer a {
+            color: #8b7bdd;
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: #5c4bbd;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .card-body {
+                padding: 1.8rem;
+            }
+            .btn-primary-pastel {
+                padding: 0.7rem 1rem;
+            }
+        }
+
+        /* Dark mode toggle floating button */
+        .dark-mode-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #f0edff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        body.dark-theme .dark-mode-btn {
+            background: #2a2a3a;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="brand-icon"><i class="fas fa-chalkboard-user"></i></div>
+                    <h2 class="fw-bold mt-2">Jam'iyyah Tholabah</h2>
+                    <p class="text-muted-soft mt-2">Selamat datang kembali ✨</p>
+                </div>
+
+                <div id="errorContainer" style="min-height: 62px;"></div>
+
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-user me-1"></i> Username</label>
+                        <div class="input-group-custom">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="username" class="form-control" placeholder="Masukkan username" autocomplete="username" required autofocus>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><i class="fas fa-lock me-1"></i> Password</label>
+                        <div class="input-group-custom">
+                            <i class="fas fa-key input-icon"></i>
+                            <input type="password" id="password" class="form-control" placeholder="Kata sandi" autocomplete="current-password" required>
+                            <button type="button" class="toggle-pwd" id="togglePasswordBtn" tabindex="-1">
+                                <i class="far fa-eye-slash" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberme">
+                            <label class="form-check-label" for="rememberme">Ingat saya</label>
+                        </div>
+                        <div>
+                            <a href="#" class="link-pastel" id="forgotLink"><i class="fas fa-question-circle me-1"></i>Lupa password?</a>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary-pastel" id="loginBtn">
+                            <i class="fas fa-arrow-right-to-bracket"></i> Masuk
+                        </button>
+                    </div>
+
+                    <div class="text-center create-account mt-3">
+                        <a href="#" class="link-pastel" id="createAccountLink">
+                            <i class="fas fa-user-plus me-1"></i> Buat Akun Baru
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <span>© LEGION 8.0 | Jam'iyyah Tholabah</span>
+                    <span class="mx-2">|</span>
+                    <a href="#" id="emailLink"><i class="fas fa-envelope me-1"></i>Email</a>
+                    <span class="mx-1">|</span>
+                    <a href="#" id="contactLink"><i class="fas fa-phone-alt me-1"></i>Kontak</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dark mode toggle button -->
+    <button id="darkModeBtn" class="dark-mode-btn"><i class="fas fa-moon"></i> Mode</button>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ========== DATABASE USERS ==========
+        const divisiList = [
+            { id: 'bahasa', nama: 'Divisi Bahasa', folder: 'bahasa', redirect: 'website/pusat_data.html' },
+            { id: 'ibadah', nama: 'Divisi Ibadah', folder: 'ibadah', redirect: 'website/pusat_data.html' },
+            { id: 'fann', nama: 'Divisi Fann', folder: 'fann', redirect: 'website/pusat_data.html' },
+            { id: 'konsumsi', nama: 'Divisi Konsumsi', folder: 'konsumsi', redirect: 'website/pusat_data.html' },
+            { id: 'kebersihan', nama: 'Divisi Kebersihan', folder: 'kebersihan', redirect: 'website/pusat_data.html' },
+            { id: 'olahraga', nama: 'Divisi Olahraga', folder: 'olahraga', redirect: 'website/pusat_data.html' }
+        ];
+
+        const users = [
+            { username: 'admin_bahasa', password: 'admin123', name: 'Admin Divisi Bahasa', role: 'admin', divisiId: 'bahasa', avatar: 'admin.jpg' },
+            { username: 'guru_bahasa', password: 'guru123', name: 'Ustadz Divisi Bahasa', role: 'guru', divisiId: 'bahasa', avatar: 'guru1.jpg' },
+            { username: 'admin_ibadah', password: 'admin123', name: 'Admin Divisi Ibadah', role: 'admin', divisiId: 'ibadah', avatar: 'admin.jpg' },
+            { username: 'guru_ibadah', password: 'guru123', name: 'Ustadz Divisi Ibadah', role: 'guru', divisiId: 'ibadah', avatar: 'guru1.jpg' },
+            { username: 'manager_fann', password: 'manager123', name: 'Manager Divisi Fann', role: 'manager', divisiId: 'fann', avatar: 'default.jpg' },
+            { username: 'manager_konsumsi', password: 'manager123', name: 'Manager Divisi Konsumsi', role: 'manager', divisiId: 'konsumsi', avatar: 'default.jpg' },
+            { username: 'manager_kebersihan', password: 'manager123', name: 'Manager Divisi Kebersihan', role: 'manager', divisiId: 'kebersihan', avatar: 'default.jpg' },
+            { username: 'manager_olahraga', password: 'manager123', name: 'Manager Divisi Olahraga', role: 'manager', divisiId: 'olahraga', avatar: 'default.jpg' },
+            { username: 'superadmin', password: 'super123', name: 'Super Administrator', role: 'superadmin', divisiId: 'all', avatar: 'admin.jpg' }
+        ];
+
+        if (localStorage.getItem('currentUser')) {
+            const cu = JSON.parse(localStorage.getItem('currentUser'));
+            if (cu.divisiId === 'all') window.location.href = 'dashboard/index.html';
+            else window.location.href = `divisi/${cu.divisiId}/pusat_data.html`;
+        }
+
+        const remembered = localStorage.getItem('rememberedUser');
+        if (remembered) {
+            try {
+                const { username } = JSON.parse(remembered);
+                if (username) {
+                    document.getElementById('username').value = username;
+                    document.getElementById('rememberme').checked = true;
+                }
+            } catch(e) {}
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const rememberCheck = document.getElementById('rememberme');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorContainer = document.getElementById('errorContainer');
+        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        function showError(msg) {
+            errorContainer.innerHTML = `<div class="alert-pastel"><i class="fas fa-exclamation-circle"></i><span>${msg}</span></div>`;
+            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            setTimeout(() => { if (errorContainer.firstChild) errorContainer.innerHTML = ''; }, 3800);
+        }
+        function clearError() { if (errorContainer.innerHTML) errorContainer.innerHTML = ''; }
+        function shakeField(field) {
+            field.style.transform = 'translateX(4px)';
+            setTimeout(() => { field.style.transform = 'translateX(-4px)'; }, 80);
+            setTimeout(() => { field.style.transform = 'translateX(2px)'; }, 150);
+            setTimeout(() => { field.style.transform = 'translateX(0)'; }, 220);
+        }
+        function setButtonLoading(loading) {
+            if (loading) {
+                loginBtn.disabled = true;
+                loginBtn.classList.add('btn-loading');
+                loginBtn.innerHTML = `<span class="spinner-sm"></span> Memproses...`;
+            } else {
+                loginBtn.disabled = false;
+                loginBtn.classList.remove('btn-loading');
+                loginBtn.innerHTML = `<i class="fas fa-arrow-right-to-bracket"></i> Masuk`;
+            }
+        }
+
+        if (togglePasswordBtn) {
+            togglePasswordBtn.addEventListener('click', () => {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                toggleIcon.classList.toggle('fa-eye-slash', type === 'password');
+                toggleIcon.classList.toggle('fa-eye', type === 'text');
+                passwordInput.focus();
+            });
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearError();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+            if (!username) { showError('Username tidak boleh kosong ✨'); shakeField(usernameInput); usernameInput.focus(); return; }
+            if (!password) { showError('Password tidak boleh kosong 🔐'); shakeField(passwordInput); passwordInput.focus(); return; }
+            setButtonLoading(true);
+            await new Promise(r => setTimeout(r, 450));
+            const foundUser = users.find(u => u.username === username && u.password === password);
+            if (foundUser) {
+                const divisiInfo = divisiList.find(d => d.id === foundUser.divisiId);
+                const userData = {
+                    username: foundUser.username,
+                    name: foundUser.name,
+                    role: foundUser.role,
+                    avatar: foundUser.avatar,
+                    divisiId: foundUser.divisiId,
+                    divisiNama: divisiInfo ? divisiInfo.nama : 'Super Admin'
+                };
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                localStorage.setItem('divisi_aktif', foundUser.divisiId);
+                if (rememberCheck.checked) localStorage.setItem('rememberedUser', JSON.stringify({ username: foundUser.username }));
+                else localStorage.removeItem('rememberedUser');
+                loginBtn.style.transform = 'scale(0.97)';
+                if (foundUser.role === 'superadmin' || foundUser.divisiId === 'all') {
+                    setTimeout(() => window.location.href = 'dashboard/index.html', 150);
+                } else {
+                    setTimeout(() => window.location.href = `divisi/${foundUser.divisiId}/pusat_data.html`, 150);
+                }
+            } else {
+                setButtonLoading(false);
+                showError('Username atau password salah. Periksa kembali.');
+                shakeField(passwordInput);
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        const forgotLink = document.getElementById('forgotLink');
+        const createAccountLink = document.getElementById('createAccountLink');
+        const emailLink = document.getElementById('emailLink');
+        const contactLink = document.getElementById('contactLink');
+
+        function showFloatingMessage(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 m-3 p-3 rounded-4 shadow bg-white';
+            toast.style.zIndex = '9999';
+            toast.style.borderLeft = '4px solid #a29bfe';
+            toast.innerHTML = `<div class="d-flex gap-2"><i class="fas fa-info-circle" style="color:#a29bfe"></i><span class="small">${msg}</span><button class="btn-close ms-auto btn-sm"></button></div>`;
+            document.body.appendChild(toast);
+            toast.querySelector('.btn-close').onclick = () => toast.remove();
+            setTimeout(() => toast.remove(), 3500);
+        }
+        if (forgotLink) forgotLink.onclick = (e) => { e.preventDefault(); showFloatingMessage('🔐 Hubungi administrator pusat untuk reset password.'); };
+        if (createAccountLink) createAccountLink.onclick = (e) => { e.preventDefault(); showFloatingMessage('📝 Pendaftaran akun baru: hubungi superadmin.'); };
+        if (emailLink) emailLink.onclick = (e) => { e.preventDefault(); showFloatingMessage('📧 Email: jamiyyah@pesantren.sch.id'); };
+        if (contactLink) contactLink.onclick = (e) => { e.preventDefault(); showFloatingMessage('📞 Kontak: +62 812 3456 7890'); };
+
+        passwordInput.addEventListener('input', clearError);
+        usernameInput.addEventListener('input', clearError);
+
+        // Dark mode
+        const darkBtn = document.getElementById('darkModeBtn');
+        const savedDark = localStorage.getItem('darkMode') === 'true';
+        if (savedDark) {
+            document.body.classList.add('dark-theme');
+            darkBtn.innerHTML = '<i class="fas fa-sun"></i> Light';
+        }
+        darkBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('darkMode', isDark);
+            darkBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Mode';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papan Ketik Arab | Divisi Ibadah</title>
+    <!-- CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/themes.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../src/usbFileManager.js"></script>
+    <style>
+        /* Gaya khusus keyboard (tidak mengganggu themes.css) */
+        .keyboard-container { max-width: 100%; margin: 0 auto; }
+        .keyboard-section { margin-bottom: 2rem; }
+        .keyboard-section h5 { text-align: center; margin-bottom: 1rem; }
+        .keyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+            margin: 1rem 0;
+            direction: rtl;
+        }
+        .keyboard-btn {
+            font-size: 1.5rem;
+            padding: 0.5rem 0;
+            border-radius: 1rem;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            transition: all 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.2;
+            font-family: 'Sakkal Majalla', 'Traditional Arabic', serif;
+        }
+        body.dark .keyboard-btn {
+            background: #1a1a2e;
+            border-color: #334152;
+            color: #e0e0e0;
+        }
+        .keyboard-btn:hover {
+            transform: translateY(-2px);
+            background: #f0edff;
+        }
+        body.dark .keyboard-btn:hover {
+            background: #2a2a3a;
+        }
+        .keyboard-btn small {
+            font-size: 0.7rem;
+            color: #6c757d;
+            font-family: sans-serif;
+        }
+        body.dark .keyboard-btn small {
+            color: #adb5bd;
+        }
+        .arabic-textarea {
+            font-size: 1.5rem;
+            direction: rtl;
+            font-family: 'Sakkal Majalla', 'Traditional Arabic', serif;
+            min-height: 150px;
+        }
+        .control-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        #copymes {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        #copymes.visible { opacity: 1; }
+        .instructions-card { margin-top: 1rem; display: none; }
+        .instructions-card.show { display: block; }
+        .instructions-table { width: 100%; max-width: 600px; margin: 0 auto; }
+        .instructions-table td { padding: 0.3rem 0.5rem; }
+        .instructions-table td:first-child { text-align: right; font-family: 'Sakkal Majalla', 'Traditional Arabic', serif; font-size: 1.2rem; }
+    </style>
+</head>
+<body class="divisi-ibadah">
+<div id="db-wrapper">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-3"><h4 class="fw-bold">Divisi Ibadah</h4></div>
+        <ul class="nav flex-column">
+            <li><a href="pusat_data.html"><i class="fas fa-database me-2"></i> Darur Rekap</a></li>
+            <li><a href="daftar_santri.html"><i class="fas fa-users me-2"></i> Daftar Santri</a></li>
+            <li><a href="tentang.html"><i class="fas fa-info-circle me-2"></i> Tentang</a></li>
+            <li><div class="navbar-heading">Form Input</div></li>
+            <li><a href="form_pelanggaran.html"><i class="fas fa-exclamation-triangle me-2"></i> Input Pelanggaran</a></li>
+            <li><a href="form_reward.html"><i class="fas fa-gift me-2"></i> Input Reward</a></li>
+            <li><a class="active" href="arabic_keyboard.html"><i class="fas fa-keyboard me-2"></i> Keyboard Arab</a></li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="header">
+            <div class="navbar-classic">
+                <a id="nav-toggle" href="#"><i class="fas fa-bars"></i></a>
+                <div class="d-flex align-items-center gap-3">
+                    <button id="darkModeBtn" class="btn btn-sm btn-outline-secondary"><i class="fas fa-moon"></i></button>
+                    <div class="dropdown">
+                        <a href="#" data-bs-toggle="dropdown"><img src="../../assets/images/avatar/default.jpg" class="avatar-md" id="userAvatar"></a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div class="px-3 py-2"><strong id="userFullName">User</strong><br><span class="small text-muted" id="userRole"></span></div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="settings.html">Pengaturan</a>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout()">Keluar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid px-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h3 class="fw-semibold">Papan Ketik Arab <span class="badge bg-secondary ms-2">Keyboard Arab</span></h3>
+                <div class="datetime-container"><i class="far fa-clock"></i><span id="jamIndo">--:--:--</span><span class="arabic-clock" id="jamArab">--:--:--</span></div>
+            </div>
+
+            <!-- Tombol USB (opsional) -->
+            <div class="mb-3">
+                <button id="folderStatusBtn" class="btn btn-pastel-primary"><i class="fas fa-folder-open me-2"></i><span id="folderStatus">Pilih USB (Cadangan)</span></button>
+            </div>
+
+            <div class="card p-4">
+                <div class="keyboard-container">
+                    <textarea id="bar" class="form-control arabic-textarea" rows="4" placeholder="اكتب هنا..."></textarea>
+
+                    <div class="control-bar">
+                        <button class="btn btn-pastel-primary btn-sm" onclick="copyText()"><i class="fas fa-copy me-1"></i> Salin</button>
+                        <button class="btn btn-pastel-success btn-sm" onclick="saveText()"><i class="fas fa-save me-1"></i> Simpan</button>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="resetText()"><i class="fas fa-undo me-1"></i> Bersihkan</button>
+                        <button class="btn btn-outline-pastel btn-sm" onclick="insertSpace()"><i class="fas fa-space-shuttle me-1"></i> Spasi</button>
+                        <button class="btn btn-outline-secondary btn-sm" id="frame-toggle"><i class="fas fa-expand me-1"></i> Besarkan Area</button>
+                    </div>
+
+                    <!-- Huruf Hijaiyah -->
+                    <div class="keyboard-section">
+                        <h5>Huruf Hijaiyah</h5>
+                        <div class="keyboard-grid">
+                            <button class="keyboard-btn" onclick="insertChar('ا')"><span>ا</span><small>a</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ب')"><span>ب</span><small>b</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ت')"><span>ت</span><small>t</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ث')"><span>ث</span><small>'t</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ج')"><span>ج</span><small>j</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ح')"><span>ح</span><small>H</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('خ')"><span>خ</span><small>'H</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('د')"><span>د</span><small>d</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ذ')"><span>ذ</span><small>'d</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ر')"><span>ر</span><small>r</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ز')"><span>ز</span><small>z</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('س')"><span>س</span><small>s</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ش')"><span>ش</span><small>'s</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ص')"><span>ص</span><small>S</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ض')"><span>ض</span><small>D</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ط')"><span>ط</span><small>T</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ظ')"><span>ظ</span><small>Z</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ع')"><span>ع</span><small>'</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('غ')"><span>غ</span><small>'g</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ف')"><span>ف</span><small>f</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ق')"><span>ق</span><small>q</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ك')"><span>ك</span><small>k</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ل')"><span>ل</span><small>l</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('م')"><span>م</span><small>m</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ن')"><span>ن</span><small>n</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ه')"><span>ه</span><small>h</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('و')"><span>و</span><small>w</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ي')"><span>ي</span><small>y</small></button>
+                        </div>
+                    </div>
+
+                    <!-- Harakat & Tanda Baca -->
+                    <div class="keyboard-section">
+                        <h5>Harakat & Tanda Baca</h5>
+                        <div class="keyboard-grid">
+                            <button class="keyboard-btn" onclick="insertChar('ْ')"><span>◌ْ</span><small>sukūn</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ّ')"><span>◌ّ</span><small>šadda</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ٍ')"><span>◌ٍ</span><small>tanwin in</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ِ')"><span>◌ِ</span><small>kasra</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ٌ')"><span>◌ٌ</span><small>tanwin un</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ُ')"><span>◌ُ</span><small>ḍamma</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ً')"><span>◌ً</span><small>tanwin an</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('َ')"><span>◌َ</span><small>fatḥa</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ـ')"><span>ـ</span><small>tatwil</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('؟')"><span>؟</span><small>?</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('؛')"><span>؛</span><small>;</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('،')"><span>،</span><small>,</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('.')"><span>.</span><small>.</small></button>
+                        </div>
+                    </div>
+
+                    <!-- Hamzah dan Varian Alif -->
+                    <div class="keyboard-section">
+                        <h5>Hamzah & Varian Alif</h5>
+                        <div class="keyboard-grid">
+                            <button class="keyboard-btn" onclick="insertChar('ئ')"><span>ئ</span><small>y'</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ؤ')"><span>ؤ</span><small>w'</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ة')"><span>ة</span><small>h'</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ى')"><span>ى</span><small>Y</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ء')"><span>ء</span><small>-</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('آ')"><span>آ</span><small>aa</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ٱ')"><span>ٱ</span><small>aa</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('أ')"><span>أ</span><small>A</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('إ')"><span>إ</span><small>I</small></button>
+                        </div>
+                    </div>
+
+                    <!-- Angka Arab -->
+                    <div class="keyboard-section">
+                        <h5>Angka Arab</h5>
+                        <div class="keyboard-grid">
+                            <button class="keyboard-btn" onclick="insertChar('٠')"><span>٠</span><small>0</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('١')"><span>١</span><small>1</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٢')"><span>٢</span><small>2</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٣')"><span>٣</span><small>3</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٤')"><span>٤</span><small>4</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٥')"><span>٥</span><small>5</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٦')"><span>٦</span><small>6</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٧')"><span>٧</span><small>7</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٨')"><span>٨</span><small>8</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('٩')"><span>٩</span><small>9</small></button>
+                        </div>
+                    </div>
+
+                    <!-- Huruf Tambahan -->
+                    <div class="keyboard-section">
+                        <h5>Huruf Tambahan</h5>
+                        <div class="keyboard-grid">
+                            <button class="keyboard-btn" onclick="insertChar('پ')"><span>پ</span><small>p</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('چ')"><span>چ</span><small>c</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('ڤ')"><span>ڤ</span><small>v</small></button>
+                            <button class="keyboard-btn" onclick="insertChar('گ')"><span>گ</span><small>g</small></button>
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mt-3"><i class="fas fa-info-circle me-1"></i> Anda juga dapat mengetik menggunakan transliterasi Latin. Contoh: "a" → ا, "t'" → ث, "H" → ح, "S" → ص, "D" → ض, "T" → ط, "Z" → ظ.</p>
+                </div>
+            </div>
+
+            <!-- Tombol Petunjuk -->
+            <div class="text-center mt-3">
+                <button id="toggleInstructions" class="btn btn-pastel-info"><i class="fas fa-question-circle me-2"></i> Bagaimana cara menggunakannya?</button>
+            </div>
+
+            <!-- Kartu Petunjuk -->
+            <div id="instructionsCard" class="card instructions-card mt-3 p-3">
+                <div class="card-header bg-transparent"><h5 class="mb-0">Petunjuk Penggunaan Keyboard Arab</h5></div>
+                <div class="card-body">
+                    <h6>Mengetik langsung dengan keyboard komputer:</h6>
+                    <ul><li>Untuk huruf tebal (emphatic), ketik huruf kapital: H, S, D, T, Z</li><li>Untuk menambah tanda diakritik, ketik apostrof: t', H', d', s', S', T', g'</li></ul>
+                    <h6>Karakter khusus:</h6>
+                    <table class="table table-sm instructions-table"><thead><tr><th>Karakter</th><th>Ketik</th></tr></thead><tbody>
+                        <tr><td class="text-end">ء (hamza)</td><td>- (tanda hubung)</td></tr>
+                        <tr><td class="text-end">ئ</td><td>y--</td></tr>
+                        <tr><td class="text-end">ؤ</td><td>w--</td></tr>
+                        <tr><td class="text-end">إ</td><td>a--</td></tr>
+                        <tr><td class="text-end">أ</td><td>-a</td></tr>
+                        <tr><td class="text-end">آ</td><td>aa</td></tr>
+                        <tr><td class="text-end">ى (ʾalif maqṣūra)</td><td>Y</td></tr>
+                        <tr><td class="text-end">ة (tāʾ marbūṭa)</td><td>h'</td></tr>
+                        <tr><td class="text-end">لا</td><td>la</td></tr>
+                    </tbody></table>
+                    <ul><li>Ketik =a, =i, =u untuk menambah tanda vokal pendek; ketik ==a, ==i, ==u untuk menambah tanwīn</li><li>Ketik =w untuk menambah šadda</li><li>Ketik =o untuk menambah sukūn</li></ul>
+                </div>
+            </div>
+        </div>
+        <footer class="footer text-center py-3">© LEGION 8.0 | Divisi Ibadah | Offline-ready</footer>
+    </div>
+</div>
+
+<!-- Notifikasi copy -->
+<div id="copymes">✅ Tersalin ke clipboard!</div>
+
+<script>
+    (function() {
+        "use strict";
+        // === CEK LOGIN & VALIDASI AKSES ===
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) { window.location.href = '../../login.html'; return; }
+        if (currentUser.divisiId !== 'ibadah' && currentUser.role !== 'superadmin') {
+            alert('Akses ditolak! Hanya Divisi Ibadah.');
+            window.location.href = '../../dashboard/index.html';
+            return;
+        }
+        document.getElementById('userFullName').innerText = currentUser.name;
+        let roleText = currentUser.role === 'admin' ? 'Administrator' : (currentUser.role === 'guru' ? 'Guru' : 'Pengurus');
+        document.getElementById('userRole').innerText = roleText;
+        let avatarSrc = currentUser.avatar ? `../../assets/images/avatar/${currentUser.avatar}` : '../../assets/images/avatar/default.jpg';
+        document.getElementById('userAvatar').src = avatarSrc;
+        window.logout = () => { if(confirm('Keluar?')){ localStorage.clear(); window.location.href='../../login.html'; } };
+
+        // === DARK MODE & JAM ===
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        if(darkMode) document.body.classList.add('dark');
+        document.getElementById('darkModeBtn')?.addEventListener('click',()=>{ document.body.classList.toggle('dark'); localStorage.setItem('darkMode',document.body.classList.contains('dark')); });
+        document.getElementById('nav-toggle')?.addEventListener('click',()=>{ document.getElementById('sidebar').classList.toggle('show'); });
+        function updateClock() { const now = new Date(); document.getElementById('jamIndo').innerText = now.toLocaleTimeString('id-ID'); document.getElementById('jamArab').innerText = now.toLocaleTimeString('ar-SA'); }
+        updateClock(); setInterval(updateClock, 1000);
+
+        // === USB (opsional, hanya untuk konsistensi) ===
+        document.getElementById('folderStatusBtn').addEventListener('click', async() => {
+            if(usbFileManager.isSupported()) {
+                let handle = await usbFileManager.pilihFolder();
+                if(handle) document.getElementById('folderStatus').innerHTML = `<i class="fas fa-check-circle"></i> USB: ${handle.name}`;
+            } else alert('Browser tidak mendukung USB');
+        });
+
+        // === FUNGSI KEYBOARD ===
+        const textarea = document.getElementById('bar');
+        window.insertChar = function(item) {
+            textarea.focus();
+            if (typeof textarea.selectionStart === 'number') {
+                const start = textarea.selectionStart, end = textarea.selectionEnd;
+                const before = textarea.value.substring(0, start);
+                const after = textarea.value.substring(end);
+                textarea.value = before + item + after;
+                textarea.selectionStart = textarea.selectionEnd = start + item.length;
+            } else textarea.value += item;
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+        window.insertSpace = () => insertChar(' ');
+        window.resetText = () => { textarea.value = ''; textarea.focus(); };
+        window.copyText = function() {
+            textarea.select(); textarea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            const msg = document.getElementById('copymes');
+            msg.classList.add('visible');
+            setTimeout(() => msg.classList.remove('visible'), 2000);
+        };
+        window.saveText = function() {
+            const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'arabic_text.txt';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        };
+        let frameLarge = false;
+        document.getElementById('frame-toggle').addEventListener('click', function() {
+            textarea.rows = frameLarge ? 4 : 12;
+            this.innerHTML = frameLarge ? '<i class="fas fa-expand me-1"></i> Besarkan Area' : '<i class="fas fa-compress me-1"></i> Kecilkan Area';
+            frameLarge = !frameLarge;
+        });
+
+        // === TRANSLITERASI LATIN KE ARAB ===
+        const replacements = [
+            [/0/g,"٠"],[/1/g,"١"],[/2/g,"٢"],[/3/g,"٣"],[/4/g,"٤"],[/5/g,"٥"],[/6/g,"٦"],[/7/g,"٧"],[/8/g,"٨"],[/9/g,"٩"],
+            [/==a/g,"ً"],[/==i/g,"ٍ"],[/==u/g,"ٌ"],[/=a/g,"َ"],[/=i/g,"ِ"],[/=u/g,"ُ"],[/=w/g,"ّ"],[/=o/g,"ْ"],
+            [/'/g,"\'"],[/[aâàā]/g,"ا"],[/اا/g,"آ"],[/b/g,"ب"],[/p/g,"پ"],[/ب'/g,"پ"],[/t/g,"ت"],[/ت'/g,"ث"],
+            [/[jǧ]/g,"ج"],[/c/g,"چ"],[/ج'/g,"چ"],[/[HḥḤ]/g,"ح"],[/[xẖK]/g,"خ"],[/ح'/g,"خ"],[/d/g,"د"],[/د'/g,"ذ"],
+            [/r/g,"ر"],[/ر'/g,"ز"],[/z/g,"ز"],[/s/g,"س"],[/س'/g,"ش"],[/[Sṣ]/g,"ص"],[/ص'/g,"ض"],[/[Dḍ]/g,"ض"],
+            [/[Tṭ]/g,"ط"],[/ط'/g,"ظ"],[/[Zẓ]/g,"ظ"],[/[gʿ]/g,"ع"],[/ع'/g,"غ"],[/f/g,"ف"],[/v/g,"ڤ"],[/ف'/g,"ڤ"],
+            [/q/g,"ق"],[/k/g,"ك"],[/g/g,"گ"],[/ك'/g,"گ"],[/l/g,"ل"],[/m/g,"م"],[/n/g,"ن"],[/h/g,"ه"],[/ه'/g,"ة"],
+            [/[wouôûōū]/g,"و"],[/و'/g,"ؤ"],[/[yieîī]/g,"ي"],[/[YIE]/g,"ى"],[/ي'/g,"ى"],[/ى'/g,"ئ"],[/[-]/g,"ء"],[/ʾ/g,"ء"],
+            [/I/g,"إ"],[/A/g,"إ"],[/ءا/g,"أ"],[/[_]/g,"ـ"],[/[?]/g,"؟"],[/[;]/g,"؛"],[/[,]/g,"،"]
+        ];
+        const transform = (txt) => { let r = txt; for(const [regex, rep] of replacements) r = r.replace(regex, rep); return r; };
+        textarea.addEventListener('input', (e) => {
+            const start = textarea.selectionStart, end = textarea.selectionEnd, scrollTop = textarea.scrollTop;
+            const original = textarea.value, transformed = transform(original);
+            if(transformed !== original) {
+                textarea.value = transformed;
+                let beforeCursor = original.substring(0, start);
+                let transformedBefore = transform(beforeCursor);
+                textarea.selectionStart = textarea.selectionEnd = transformedBefore.length;
+                textarea.scrollTop = scrollTop;
+            }
+        });
+
+        // === TOGGLE PETUNJUK ===
+        document.getElementById('toggleInstructions').addEventListener('click', function() {
+            const card = document.getElementById('instructionsCard');
+            card.classList.toggle('show');
+            this.innerHTML = card.classList.contains('show') ? '<i class="fas fa-question-circle me-2"></i> Sembunyikan Petunjuk' : '<i class="fas fa-question-circle me-2"></i> Bagaimana cara menggunakannya?';
+        });
+    })();
+</script>
+</body>
+</html>

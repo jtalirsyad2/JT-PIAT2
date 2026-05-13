@@ -474,8 +474,8 @@
             </div>
             <div class="col-lg-6">
                 <div class="row g-3">
-                    <div class="col-6"><div class="stat-card"><div class="stat-number">6+</div><div>Divisi Aktif</div></div></div>
-                    <div class="col-6"><div class="stat-card"><div class="stat-number">1.200+</div><div>Santri Terdaftar</div></div></div>
+                    <div class="col-6"><div class="stat-card"><div class="stat-number" id="statDivisi">6+</div><div>Divisi Aktif</div></div></div>
+                    <div class="col-6"><div class="stat-card"><div class="stat-number" id="statSantri">0</div><div>Santri Terdaftar</div></div></div>
                     <div class="col-6"><div class="stat-card"><div class="stat-number">98%</div><div>Kepuasan Pengurus</div></div></div>
                     <div class="col-6"><div class="stat-card"><div class="stat-number">24/7</div><div>Akses Online</div></div></div>
                 </div>
@@ -548,7 +548,23 @@
                 </div>
                 <div class="col-md-10">
                     <p class="mb-2 fst-italic">"Platform ini sangat membantu kami di Divisi Bahasa. Pencatatan pelanggaran menjadi lebih tertib, dan laporan bulanan bisa langsung di-export ke Excel."</p>
-                    <div><strong>Ust. Suharmin Muslimin, M.Pd</strong> — Pembina Divisi Bahasa</div>
+                    <div><strong>Ust. Suharmin Muslimin, M.Pd</strong> — Pembina Divisi Bahasa</div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-4">
+    <div class="container">
+        <div class="testimonial-card">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center">
+                    <i class="fas fa-quote-left fa-3x text-primary opacity-50"></i>
+                </div>
+                <div class="col-md-10">
+                    <p class="mb-2 fst-italic">"Saya sangat suka web ini, sangat rekomendasi 100% untuk membantu merekap mat'am karena sebelumnya harus rekap manual"</p>
+                    <div><strong>Muhammad Abisariy Roshan</strong> — Sekretaris Divisi Konsumsi</div>  
                 </div>
             </div>
         </div>
@@ -586,9 +602,9 @@
             <div class="col-md-3 mb-4">
                 <h6 class="text-white">Kontak</h6>
                 <ul class="list-unstyled small">
-                    <li><i class="fas fa-envelope me-2"></i> jamiyyah@pesantren.sch.id</li>
+                    <li><i class="fas fa-envelope me-2"></i> jamiyyaht@gmail.com</li>
                     <li><i class="fas fa-phone-alt me-2"></i> +62 812 3456 7890</li>
-                    <li><i class="fas fa-map-marker-alt me-2"></i> Jl. Pesantren No.1, Jawa Timur</li>
+                    <li><i class="fas fa-map-marker-alt me-2"></i> Blok Jl. Jombol No.094, RT.002/RW.006, Dawuan, Kec. Dawuan, Kabupaten Majalengka, Jawa Barat 45452</li>
                 </ul>
             </div>
             <div class="col-md-3 mb-4">
@@ -613,23 +629,23 @@
     // Data divisi sesuai dengan struktur multi-divisi
     const divisiList = [
         { id: "bahasa", nama: "Divisi Bahasa", ikon: "fa-language", warna: "#8b7bdd", 
-          fungsi: "Mengembangkan kemampuan bahasa Arab dan Inggris santri melalui program muhadhoroh, kajian kitab kuning, lomba debat, serta pendampingan tugas-tugas kebahasaan.",
-          program: ["Muhadhoroh mingguan", "Kajian Nahwu & Shorof", "Lomba Debat Bahasa", "Papan Kosa Kata Harian"] },
+          fungsi: "Mengembangkan kemampuan bahasa Arab dan Inggris santri melalui program ilqo' kalimat, pembelajaran bahasa, lomba-lomba, pemantauan santri dalam berbahasa arab.",
+          program: ["Tasmi' Mufrodat", "Daur Mabani", "Daur Lughoh", "Ta'lim Shobahi", "Mufrodat Usbu'iyyah", "Imtihan Syahri", "Mumarosah Arobiyah"] },
         { id: "ibadah", nama: "Divisi Ibadah", ikon: "fa-pray", warna: "#4caf50",
           fungsi: "Mengatur jadwal ibadah harian, kajian keagamaan, dan pembinaan spiritual santri.",
-          program: ["Jadwal Imam Shalat", "Kajian Rutin", "Tadarus Al-Quran", "Peringatan Hari Besar Islam"] },
+          program: ["Jadwal Imam Shalat", "Muhadhoroh Usbu'iyyah", "Tasmi' Adzkar", "Hisab dan Nafil", "Imtihan Adzkar"] },
         { id: "fann", nama: "Divisi Fann", ikon: "fa-palette", warna: "#ff5722",
-          fungsi: "Mengembangkan bakat seni santri melalui kaligrafi, seni rupa, serta pentas seni tahunan.",
-          program: ["Pelatihan Kaligrafi", "Lukis & Desain", "Pentas Seni Santri", "Lomba Kreasi Seni"] },
+          fungsi: "Mengembangkan bakat seni santri.",
+          program: ["Mading", "Quiz", "Fann Got Talent", "Musyahadah"] },
         { id: "konsumsi", nama: "Divisi Konsumsi", ikon: "fa-utensils", warna: "#ff9800",
           fungsi: "Mengelola kebutuhan konsumsi santri, jadwal makan, dan kebersihan dapur.",
-          program: ["Jadwal Makan", "Pengelolaan Dapur", "Gizi Seimbang", "Pelatihan Memasak"] },
+          program: ["Jaga Tabdzir", "Pembagian Ifthar Puasa Sunnah Senin-Kamis"] },
         { id: "kebersihan", nama: "Divisi Kebersihan", ikon: "fa-broom", warna: "#2196f3",
           fungsi: "Mengkoordinasi jadwal piket harian, pengelolaan sampah, serta penghijauan area pondok.",
-          program: ["Jadwal Piket Kamar", "Penghijauan Halaman", "Lomba Kebersihan", "Bank Sampah"] },
+          program: ["Daur Malabis", "Tanzhif Jama'i", "Lomba Kebersihan", "Daur Taftisy Kamar"] },
         { id: "olahraga", nama: "Divisi Olahraga", ikon: "fa-futbol", warna: "#e91e63",
-          fungsi: "Membina bakat olahraga santri, mengadakan turnamen antar kelas, serta memelihara sarana olahraga.",
-          program: ["Turnamen Futsal", "Lomba Bulutangkis", "Pembinaan Atlet Muda", "Jalan Sehat Bersama"] }
+          fungsi: "Membina bakat olahraga santri, mengadakan turnamen olahraga, serta memelihara sarana olahraga.",
+          program: ["AFC", "AVL", "ABL"] }
     ];
 
     // Render kartu divisi
@@ -680,6 +696,43 @@
         col.innerHTML = `<i class="fas ${divisi.ikon} me-2"></i> ${divisi.nama}`;
         partnerContainer.appendChild(col);
     });
+
+    // ========== FUNGSI UNTUK MENGAMBIL JUMLAH SANTRI REAL ==========
+    async function getTotalSantri() {
+        // 1. Cek dari localStorage (data santri yang sudah disimpan)
+        try {
+            let santriData = localStorage.getItem('santri_data.json');
+            if (santriData) {
+                let santri = JSON.parse(santriData);
+                if (santri.length > 0) return santri.length;
+            }
+            let santriDataOld = localStorage.getItem('santri_data');
+            if (santriDataOld) {
+                let santri = JSON.parse(santriDataOld);
+                if (santri.length > 0) return santri.length;
+            }
+        } catch(e) {}
+        
+        // 2. Fallback: baca dari students-data.js
+        try {
+            const resp = await fetch('../src/students-data.js');
+            const text = await resp.text();
+            eval(text);
+            if (typeof students !== 'undefined' && students.length) return students.length;
+        } catch(e) {}
+        
+        // 3. Fallback terakhir
+        return 1245;
+    }
+
+    // Update statistik dengan data real
+    async function updateStatistik() {
+        const totalSantri = await getTotalSantri();
+        document.getElementById('statSantri').innerText = totalSantri.toLocaleString();
+        document.getElementById('statDivisi').innerHTML = `${divisiList.length}+`;
+    }
+    
+    updateStatistik();
 
     // Dark Mode Toggle
     const darkModeToggle = document.getElementById('darkModeToggle');

@@ -1,0 +1,711 @@
+/* ==============================================
+   themes.css - Style Lengkap Semua Divisi
+   Tidak perlu <style> tambahan di HTML
+   ============================================== */
+
+/* ---------- Font ---------- */
+@font-face {
+    font-family: 'Sakkal Majalla';
+    src: local('Sakkal Majalla'), local('Traditional Arabic');
+    font-weight: normal;
+}
+
+/* ---------- Reset & Global ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: #fefcf5;
+    color: #1e2a3a;
+}
+
+/* ---------- Dark Mode Default ---------- */
+body.dark {
+    background-color: #121212;
+    color: #f0f0f0;
+}
+
+body.dark .card,
+body.dark .modal-content {
+    background-color: #1e2a3a;
+    border-color: #334152;
+    color: #fff;
+}
+
+body.dark .table,
+body.dark .table td,
+body.dark .table th {
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+    border-color: #2a2a4a;
+}
+
+body.dark .table thead th {
+    background-color: #0f0f1a;
+    color: #fff;
+}
+
+body.dark .text-muted {
+    color: #adb5bd !important;
+}
+
+body.dark .btn-outline-secondary {
+    color: #fff;
+    border-color: #4a627a;
+}
+
+body.dark .form-control,
+body.dark .form-select {
+    background-color: #2a2a3a;
+    border-color: #3a3a4a;
+    color: #fff;
+}
+
+body.dark .ac-list {
+    background-color: #1e2a3a;
+    border-color: #334152;
+}
+
+body.dark .ac-item:hover {
+    background-color: #2a3a4a;
+}
+
+/* ---------- Sidebar (Default / Fallback) ---------- */
+.sidebar {
+    width: 260px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    overflow-y: auto;
+    background: #ffffff;
+}
+
+.sidebar a {
+    padding: 0.75rem 1rem;
+    display: block;
+    text-decoration: none;
+    font-weight: 500;
+    color: #2d3a4b;
+}
+
+.sidebar a:hover {
+    background: #f0edff;
+}
+
+.sidebar .active {
+    background: #e9e6ff;
+    color: #5e4bcc;
+    border-left: 3px solid #5e4bcc;
+}
+
+.sidebar .navbar-heading {
+    color: #95a5a6;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+body.dark .sidebar {
+    background: #0f172a;
+}
+
+body.dark .sidebar a {
+    color: #cbd5e6;
+}
+
+body.dark .sidebar a:hover {
+    background: #1e2a3a;
+}
+
+body.dark .sidebar .active {
+    background: #2d3e5a;
+    color: #b9aaff;
+}
+
+/* ---------- Main Content ---------- */
+.main-content {
+    margin-left: 260px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: 0.2s;
+    }
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* ---------- Header ---------- */
+.header {
+    background: #ffffff;
+    padding: 0.6rem 1.2rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+body.dark .header {
+    background: #0a0a12;
+    border-bottom-color: #2a2a3a;
+}
+
+.navbar-classic {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+#nav-toggle {
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #2d3a4b;
+}
+
+body.dark #nav-toggle {
+    color: #ffffff;
+}
+
+.avatar-md {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+    background: #fefcff;
+    border-top: 1px solid #e9e6f5;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+}
+
+body.dark .footer {
+    background: #0f172a;
+    border-top-color: #1e293b;
+}
+
+/* ---------- DateTime ---------- */
+.datetime-container {
+    background: #f0edff;
+    border-radius: 2rem;
+    padding: 0.4rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.85rem;
+}
+
+body.dark .datetime-container {
+    background: #1e2a3a;
+    color: #e0e0e0;
+}
+
+.arabic-clock {
+    font-family: 'Sakkal Majalla', 'Traditional Arabic', serif;
+    font-size: 1rem;
+}
+
+/* ---------- Button Pastel ---------- */
+.btn-pastel-primary {
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5rem 1.2rem;
+    transition: 0.2s;
+    font-weight: 600;
+    color: white;
+}
+
+.btn-pastel-primary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-pastel-success {
+    background: #c8e6c9;
+    border: none;
+    color: #1e1b2f;
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+}
+
+body.dark .btn-pastel-success {
+    background: #2e7d32;
+    color: white;
+}
+
+.btn-pastel-danger {
+    background: #ffcdd2;
+    border: none;
+    color: #c62828;
+    border-radius: 2rem;
+}
+
+body.dark .btn-pastel-danger {
+    background: #c62828;
+    color: white;
+}
+
+.btn-pastel-info {
+    background: #ffe0b2;
+    border: none;
+    color: #e65100;
+    border-radius: 2rem;
+}
+
+body.dark .btn-pastel-info {
+    background: #f57c00;
+    color: white;
+}
+
+.btn-pastel-warning {
+    background: #ffe0b2;
+    border: none;
+    color: #e65100;
+    border-radius: 2rem;
+}
+
+/* ---------- Stat Card ---------- */
+.stat-card {
+    border-radius: 1.5rem;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+body.dark .stat-card {
+    background: #1e2a3a;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ---------- Kelas Badge ---------- */
+.kelas-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.kelas-vii { background: #e3f2fd; color: #0d47a1; }
+.kelas-viii { background: #e8f5e9; color: #1e5e2e; }
+.kelas-ix { background: #fff3e0; color: #b75d0a; }
+.kelas-il { background: #e0f7fa; color: #006064; }
+.kelas-x { background: #ede7f6; color: #512da8; }
+.kelas-xi { background: #fbe9e7; color: #bf360c; }
+.kelas-xii { background: #ffebee; color: #b71c1c; }
+
+body.dark .kelas-vii { background: #1a3a5c; color: #90caf9; }
+body.dark .kelas-viii { background: #1a4a2a; color: #a5d6a7; }
+body.dark .kelas-ix { background: #5a3a1a; color: #ffcc80; }
+body.dark .kelas-il { background: #1a5a5a; color: #80deea; }
+body.dark .kelas-x { background: #2a1a5a; color: #b39ddb; }
+body.dark .kelas-xi { background: #5a1a1a; color: #ffab91; }
+body.dark .kelas-xii { background: #5a1a2a; color: #ef9a9a; }
+
+/* ---------- Table ---------- */
+.table th {
+    cursor: pointer;
+    user-select: none;
+}
+
+.table th:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.dark .table th:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Autocomplete ---------- */
+.ac-wrapper {
+    position: relative;
+}
+
+.ac-list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-top: 4px;
+    max-height: 260px;
+    overflow-y: auto;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.ac-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f1f1;
+    display: flex;
+    flex-direction: column;
+}
+
+.ac-item:hover {
+    background: #f8f9fa;
+}
+
+.ac-sub {
+    font-size: 0.75rem;
+    color: #5e4bcc;
+    margin-top: 4px;
+}
+
+/* ---------- Status Badge ---------- */
+.status-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.status-diterima {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-ditolak {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+body.dark .status-diterima {
+    background: #1a3a1a;
+    color: #a5d6a7;
+}
+
+body.dark .status-ditolak {
+    background: #3a1a1a;
+    color: #ef9a9a;
+}
+
+body.dark .status-pending {
+    background: #3a3a1a;
+    color: #ffe082;
+}
+
+/* ---------- Table Card ---------- */
+.table-card {
+    background: #fff;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+body.dark .table-card {
+    background: #1e2a3a;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+body.dark .table-header {
+    border-bottom-color: #334152;
+}
+
+.table-container {
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+
+/* ==============================================
+   TEMA PER DIVISI (Class pada <body>)
+   ============================================== */
+
+/* ---------- 1. Divisi Bahasa (Merah Pastel) ---------- */
+body.divisi-bahasa .sidebar {
+    background: #fff5f5;
+}
+body.divisi-bahasa .sidebar a {
+    color: #4a2525;
+}
+body.divisi-bahasa .sidebar a:hover {
+    background: #ffebeb;
+}
+body.divisi-bahasa .sidebar .active {
+    background: #ffe0e0;
+    color: #d32f2f;
+    border-left: 3px solid #ff8a8a;
+}
+body.divisi-bahasa .btn-pastel-primary {
+    background: #ff8a8a;
+    color: #5a1a1a;
+}
+body.divisi-bahasa .btn-pastel-primary:hover {
+    background: #e57373;
+}
+/* Dark Mode Divisi Bahasa */
+body.dark.divisi-bahasa .sidebar {
+    background: #2a1a1a;
+}
+body.dark.divisi-bahasa .sidebar a {
+    color: #e0c0c0;
+}
+body.dark.divisi-bahasa .sidebar a:hover {
+    background: #3a2222;
+}
+body.dark.divisi-bahasa .sidebar .active {
+    background: #4a2a2a;
+    color: #ff8a8a;
+    border-left-color: #ff8a8a;
+}
+body.dark.divisi-bahasa .btn-pastel-primary {
+    background: #ff8a8a;
+    color: #1a1a1a;
+}
+body.dark.divisi-bahasa .btn-pastel-primary:hover {
+    background: #e57373;
+}
+
+/* ---------- 2. Divisi Ibadah (Biru Pastel) ---------- */
+body.divisi-ibadah .sidebar {
+    background: #e3f2fd;
+}
+body.divisi-ibadah .sidebar a {
+    color: #0d3a66;
+}
+body.divisi-ibadah .sidebar a:hover {
+    background: #d4e9ff;
+}
+body.divisi-ibadah .sidebar .active {
+    background: #bbdef5;
+    color: #1565c0;
+    border-left: 3px solid #64b5f6;
+}
+body.divisi-ibadah .btn-pastel-primary {
+    background: #64b5f6;
+    color: white;
+}
+body.divisi-ibadah .btn-pastel-primary:hover {
+    background: #42a5f5;
+}
+body.dark.divisi-ibadah .sidebar {
+    background: #0a1a2a;
+}
+body.dark.divisi-ibadah .sidebar a {
+    color: #b0d4ff;
+}
+body.dark.divisi-ibadah .sidebar a:hover {
+    background: #0e2a3a;
+}
+body.dark.divisi-ibadah .sidebar .active {
+    background: #1a2a4a;
+    color: #64b5f6;
+}
+body.dark.divisi-ibadah .btn-pastel-primary {
+    background: #64b5f6;
+}
+body.dark.divisi-ibadah .btn-pastel-primary:hover {
+    background: #42a5f5;
+}
+
+/* ---------- 3. Divisi Kebersihan (Oranye Pastel) ---------- */
+body.divisi-kebersihan .sidebar {
+    background: #fff3e0;
+}
+body.divisi-kebersihan .sidebar a {
+    color: #5a3a1a;
+}
+body.divisi-kebersihan .sidebar a:hover {
+    background: #fff0e0;
+}
+body.divisi-kebersihan .sidebar .active {
+    background: #ffe0b2;
+    color: #e65100;
+    border-left: 3px solid #ffb74d;
+}
+body.divisi-kebersihan .btn-pastel-primary {
+    background: #ffb74d;
+    color: #5a3a1a;
+}
+body.divisi-kebersihan .btn-pastel-primary:hover {
+    background: #ffa726;
+}
+body.dark.divisi-kebersihan .sidebar {
+    background: #2a1a0a;
+}
+body.dark.divisi-kebersihan .sidebar a {
+    color: #ffe0b0;
+}
+body.dark.divisi-kebersihan .sidebar a:hover {
+    background: #3a2a1a;
+}
+body.dark.divisi-kebersihan .sidebar .active {
+    background: #4a2a1a;
+    color: #ffb74d;
+}
+body.dark.divisi-kebersihan .btn-pastel-primary {
+    background: #ffb74d;
+    color: #1a1a1a;
+}
+body.dark.divisi-kebersihan .btn-pastel-primary:hover {
+    background: #ffa726;
+}
+
+/* ---------- 4. Divisi Fann (Seni) - Biru Langit & Pink ---------- */
+body.divisi-fann .sidebar {
+    background: #fce4ec;
+}
+body.divisi-fann .sidebar a {
+    color: #5a2a4a;
+}
+body.divisi-fann .sidebar a:hover {
+    background: #fce4ec;
+}
+body.divisi-fann .sidebar .active {
+    background: #f8bbd0;
+    color: #c2185b;
+    border-left: 3px solid #80deea;
+}
+body.divisi-fann .btn-pastel-primary {
+    background: #80deea;
+    color: #5a2a4a;
+}
+body.divisi-fann .btn-pastel-primary:hover {
+    background: #4dd0e1;
+}
+body.dark.divisi-fann .sidebar {
+    background: #2a1a2a;
+}
+body.dark.divisi-fann .sidebar a {
+    color: #f0c0d0;
+}
+body.dark.divisi-fann .sidebar a:hover {
+    background: #3a2a3a;
+}
+body.dark.divisi-fann .sidebar .active {
+    background: #4a2a4a;
+    color: #f48fb1;
+    border-left-color: #80deea;
+}
+body.dark.divisi-fann .btn-pastel-primary {
+    background: #80deea;
+    color: #1a1a1a;
+}
+body.dark.divisi-fann .btn-pastel-primary:hover {
+    background: #4dd0e1;
+}
+
+/* ---------- 5. Divisi Konsumsi (Hijau Pastel) ---------- */
+body.divisi-konsumsi .sidebar {
+    background: #e8f5e9;
+}
+body.divisi-konsumsi .sidebar a {
+    color: #1b5e20;
+}
+body.divisi-konsumsi .sidebar a:hover {
+    background: #c8e6c9;
+}
+body.divisi-konsumsi .sidebar .active {
+    background: #a5d6a7;
+    color: #2e7d32;
+    border-left: 3px solid #81c784;
+}
+body.divisi-konsumsi .btn-pastel-primary {
+    background: #81c784;
+    color: #1b5e20;
+}
+body.divisi-konsumsi .btn-pastel-primary:hover {
+    background: #66bb6a;
+}
+/* Dark Mode Divisi Konsumsi */
+body.dark.divisi-konsumsi .sidebar {
+    background: #1a2a1a;
+}
+body.dark.divisi-konsumsi .sidebar a {
+    color: #c8e6c9;
+}
+body.dark.divisi-konsumsi .sidebar a:hover {
+    background: #2a3a2a;
+}
+body.dark.divisi-konsumsi .sidebar .active {
+    background: #2e4a2e;
+    color: #81c784;
+    border-left-color: #81c784;
+}
+body.dark.divisi-konsumsi .btn-pastel-primary {
+    background: #81c784;
+    color: #1a1a1a;
+}
+body.dark.divisi-konsumsi .btn-pastel-primary:hover {
+    background: #66bb6a;
+}
+
+/* ---------- 6. Divisi Olahraga (Teal Pastel) ---------- */
+body.divisi-olahraga .sidebar {
+    background: #e0f2f1;
+}
+body.divisi-olahraga .sidebar a {
+    color: #004d40;
+}
+body.divisi-olahraga .sidebar a:hover {
+    background: #b2dfdb;
+}
+body.divisi-olahraga .sidebar .active {
+    background: #80cbc4;
+    color: #00695c;
+    border-left: 3px solid #4db6ac;
+}
+body.divisi-olahraga .btn-pastel-primary {
+    background: #4db6ac;
+    color: #004d40;
+}
+body.divisi-olahraga .btn-pastel-primary:hover {
+    background: #26a69a;
+}
+/* Dark Mode Divisi Olahraga */
+body.dark.divisi-olahraga .sidebar {
+    background: #0a1a1a;
+}
+body.dark.divisi-olahraga .sidebar a {
+    color: #b2dfdb;
+}
+body.dark.divisi-olahraga .sidebar a:hover {
+    background: #1a2a2a;
+}
+body.dark.divisi-olahraga .sidebar .active {
+    background: #1a3a3a;
+    color: #80cbc4;
+    border-left-color: #4db6ac;
+}
+body.dark.divisi-olahraga .btn-pastel-primary {
+    background: #4db6ac;
+    color: #1a1a1a;
+}
+body.dark.divisi-olahraga .btn-pastel-primary:hover {
+    background: #26a69a;
+}

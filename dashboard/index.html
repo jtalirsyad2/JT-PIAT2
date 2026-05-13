@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Superadmin | Jam'iyyah Tholabah</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- USB File Manager -->
+    <script src="../src/usbFileManager.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fefcf5;
+            color: #1e2a3a;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background: #121212;
+            color: #f0f0f0;
+        }
+        body.dark-mode .navbar {
+            background: rgba(18, 18, 18, 0.96);
+            border-bottom: 1px solid #2a2a3a;
+        }
+        body.dark-mode .navbar-brand {
+            background: linear-gradient(135deg, #b9aaff, #8b7bdd);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.dark-mode .nav-link {
+            color: #cbd5e6;
+        }
+        body.dark-mode .nav-link:hover, body.dark-mode .nav-link.active {
+            color: #b9aaff;
+        }
+        body.dark-mode .stat-card,
+        body.dark-mode .chart-container,
+        body.dark-mode .drive-card,
+        body.dark-mode .usb-card,
+        body.dark-mode .delete-card {
+            background: #1e2a3a !important;
+            border-color: #334152;
+        }
+        body.dark-mode .text-muted, body.dark-mode small {
+            color: #c0c0c0 !important;
+        }
+        body.dark-mode .footer {
+            background: #0a0a12;
+            border-top-color: #1e293b;
+        }
+        body.dark-mode .clock {
+            background: #2a2a3a;
+            color: #f0f0f0;
+        }
+        body.dark-mode .btn-outline-primary {
+            border-color: #8b7bdd;
+            color: #b9aaff;
+        }
+        body.dark-mode .btn-outline-primary:hover {
+            background: #8b7bdd;
+            color: white;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 0.8rem 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #5e4bcc, #b7abff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #2d3a4b;
+            margin: 0 0.25rem;
+            transition: 0.2s;
+        }
+        .nav-link.active {
+            color: #8b7bdd !important;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            cursor: pointer;
+            border: 1px solid #f0edf5;
+            height: 100%;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            color: #8b7bdd;
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.2rem;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: #5b6e8c;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-top: 1.5rem;
+        }
+        .drive-card, .usb-card, .delete-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .clock {
+            font-size: 0.85rem;
+            background: #f0edff;
+            padding: 0.3rem 0.9rem;
+            border-radius: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .footer {
+            background: #fefcff;
+            border-top: 1px solid #e9e6f5;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.8rem;
+        }
+        .floating-dark-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #f0edff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        body.dark-mode .floating-dark-btn {
+            background: #2a2a3a;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .stat-number { font-size: 1.8rem; }
+            .navbar-brand { font-size: 1.2rem; }
+        }
+        .btn-pastel-primary, .btn-pastel-success, .btn-pastel-warning, .btn-pastel-info, .btn-pastel-danger {
+            transition: 0.2s;
+        }
+        .btn-pastel-primary:hover, .btn-pastel-success:hover, .btn-pastel-warning:hover, .btn-pastel-info:hover, .btn-pastel-danger:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="../index.html">Jam'iyyah Tholabah</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="index.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="pusat_pelanggaran.html">Pelanggaran</a></li>
+                <li class="nav-item"><a class="nav-link" href="pusat_reward.html">Reward</a></li>
+                <li class="nav-item"><a class="nav-link" href="pusat_pengajuan.html">Pengajuan</a></li>
+                <li class="nav-item"><a class="nav-link" href="daftar_santri.html">Absen</a></li>
+                <li class="nav-item"><a class="nav-link" href="pilih_divisi.html">Landing</a></li>
+                <li class="nav-item"><a class="nav-link" href="../divisi/bahasa/tentang.html">Tentang</a></li>
+            </ul>
+            <div class="d-flex gap-2 align-items-center">
+                <div class="clock me-2"><i class="far fa-clock"></i><span id="jamIndo">--:--:--</span></div>
+                <a href="../login.html" class="btn btn-sm btn-outline-primary" onclick="logout()">Keluar</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-semibold">Dashboard Superadmin</h3>
+        <div class="text-muted small">Selamat datang, Super Administrator</div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="stat-card" onclick="window.location.href='pusat_pelanggaran.html'">
+                <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="stat-number" id="totalPelanggaran">0</div>
+                <div class="stat-label">Total Pelanggaran</div>
+                <small class="text-muted">Seluruh divisi</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" onclick="window.location.href='pusat_reward.html'">
+                <div class="stat-icon"><i class="fas fa-gift"></i></div>
+                <div class="stat-number" id="totalReward">0</div>
+                <div class="stat-label">Total Reward</div>
+                <small class="text-muted">*Reward divisi bahasa dihitung per santri (min 4)</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" onclick="window.location.href='pusat_pengajuan.html'">
+                <div class="stat-icon"><i class="fas fa-file-upload"></i></div>
+                <div class="stat-number" id="totalPengajuan">0</div>
+                <div class="stat-label">Total Pengajuan</div>
+                <small class="text-muted">File masuk</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" onclick="window.location.href='daftar_santri.html'">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number" id="totalSantri">0</div>
+                <div class="stat-label">Total Santri</div>
+                <small class="text-muted">Terdaftar</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tombol USB & Status -->
+    <div class="usb-card">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div><i class="fas fa-usb me-2"></i> <span id="usbStatus">Belum ada folder USB dipilih</span></div>
+            <div>
+                <button id="usbSelectBtn" class="btn btn-pastel-primary btn-sm"><i class="fas fa-folder-open"></i> Pilih USB</button>
+                <button id="usbSyncBtn" class="btn btn-pastel-info btn-sm" disabled><i class="fas fa-sync-alt"></i> Baca Data USB</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grafik -->
+    <div class="chart-container">
+        <h5 class="mb-3"><i class="fas fa-chart-line me-2"></i> Statistik Pelanggaran & Reward per Divisi</h5>
+        <canvas id="divisiChart" height="250"></canvas>
+    </div>
+
+    <!-- Google Drive Sync -->
+    <div class="drive-card">
+        <h5><i class="fab fa-google-drive" style="color:#4285F4;"></i> Sinkronisasi Google Drive</h5>
+        <div class="row g-3">
+            <div class="col-md-3"><button id="configDriveBtn" class="btn btn-pastel-warning w-100"><i class="fas fa-cog"></i> Konfigurasi API</button></div>
+            <div class="col-md-3"><button id="loginDriveBtn" class="btn btn-pastel-primary w-100" disabled><i class="fab fa-google"></i> Login Google</button></div>
+            <div class="col-md-3"><button id="syncDriveBtn" class="btn btn-pastel-info w-100" disabled><i class="fas fa-sync"></i> Ambil dari Drive</button></div>
+            <div class="col-md-3"><button id="uploadDriveBtn" class="btn btn-pastel-success w-100" disabled><i class="fas fa-cloud-upload-alt"></i> Simpan ke Drive</button></div>
+            <div class="col-12 mt-2"><div id="driveStatus" class="small text-muted"></div></div>
+        </div>
+    </div>
+
+    <!-- Tombol Hapus Semua Data -->
+    <div class="delete-card">
+        <h5 class="text-danger"><i class="fas fa-trash-alt me-2"></i> Hapus Semua Data</h5>
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <p class="text-muted small mb-0">Menghapus semua data pelanggaran, reward, dan pengajuan dari localStorage, USB (JTDrive), dan Google Drive. <strong>File santri_data.json tidak akan dihapus.</strong></p>
+            </div>
+            <div class="col-md-4 text-end">
+                <button id="deleteAllDataBtn" class="btn btn-pastel-danger"><i class="fas fa-trash"></i> Hapus Semua Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Catatan -->
+    <div class="mt-4 p-3 bg-light rounded-3 text-center">
+        <i class="fas fa-info-circle me-2"></i>
+        <small class="text-muted">Data di atas merupakan agregat dari seluruh divisi yang tersimpan di localStorage. Gunakan USB atau Drive untuk integrasi antardevice.</small>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <span>© LEGION 8.0 | Jam'iyyah Tholabah - Dashboard Superadmin</span><br>
+        <small class="text-muted">Platform Manajemen Divisi Terintegrasi</small>
+    </div>
+</footer>
+
+<button id="floatingDarkBtn" class="floating-dark-btn"><i class="fas fa-moon"></i> Mode</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ========== DARK MODE & JAM ==========
+    const darkBtn = document.getElementById('floatingDarkBtn');
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+        darkBtn.innerHTML = '<i class="fas fa-sun"></i> Light';
+    }
+    darkBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const dark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', dark);
+        darkBtn.innerHTML = dark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Mode';
+        setTimeout(initChart, 100);
+    });
+
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('jamIndo').innerText = now.toLocaleTimeString('id-ID');
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    window.logout = function() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('rememberedUser');
+        localStorage.removeItem('divisi_aktif');
+        window.location.href = '../login.html';
+    };
+
+    // ========== DATA DIVISI ==========
+    const divisiList = [
+        { id: 'bahasa', name: 'Divisi Bahasa', folderDrive: 'DivisiBahasa', folderUSB: 'Bahasa' },
+        { id: 'ibadah', name: 'Divisi Ibadah', folderDrive: 'DivisiIbadah', folderUSB: 'Ibadah' },
+        { id: 'fann', name: 'Divisi Fann', folderDrive: 'DivisiFann', folderUSB: 'Fann' },
+        { id: 'konsumsi', name: 'Divisi Konsumsi', folderDrive: 'DivisiKonsumsi', folderUSB: 'Konsumsi' },
+        { id: 'kebersihan', name: 'Divisi Kebersihan', folderDrive: 'DivisiKebersihan', folderUSB: 'Kebersihan' },
+        { id: 'olahraga', name: 'Divisi Olahraga', folderDrive: 'DivisiOlahraga', folderUSB: 'Olahraga' }
+    ];
+
+    // ========== BACA DATA DARI LOCALSTORAGE ==========
+    function getPelanggaranDivisi(divisiId) {
+        const key = `data_pelanggaran_${divisiId}.json`;
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : [];
+    }
+    function getRewardDivisi(divisiId) {
+        const key = `data_reward_${divisiId}.json`;
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : [];
+    }
+    function getBahasaRewardStats() {
+        const rewards = getRewardDivisi('bahasa');
+        const freq = {};
+        rewards.forEach(r => { if (r.nis) freq[r.nis] = (freq[r.nis] || 0) + 1; });
+        const min4 = Object.values(freq).filter(c => c >= 4).length;
+        return { min4, totalSantriReward: Object.keys(freq).length };
+    }
+    function hitungTotalReward() {
+        let total = 0;
+        for (const d of divisiList) {
+            if (d.id === 'bahasa') total += getBahasaRewardStats().min4;
+            else total += getRewardDivisi(d.id).length;
+        }
+        return total;
+    }
+    function hitungTotalPelanggaran() {
+        let total = 0;
+        for (const d of divisiList) total += getPelanggaranDivisi(d.id).length;
+        return total;
+    }
+    function hitungTotalPengajuan() {
+        let total = localStorage.getItem('total_pengajuan');
+        if (total) return parseInt(total);
+        try {
+            let files = JSON.parse(localStorage.getItem('pengajuan_files') || '[]');
+            return files.length;
+        } catch(e) { return 0; }
+    }
+    async function getTotalSantri() {
+        try {
+            let santriData = localStorage.getItem('santri_data.json');
+            if (santriData) {
+                let santri = JSON.parse(santriData);
+                return santri.length;
+            }
+        } catch(e) {}
+        try {
+            let resp = await fetch('../src/students-data.js');
+            let text = await resp.text();
+            eval(text);
+            if (window.students && window.students.length) return window.students.length;
+        } catch(e) {}
+        return 1245;
+    }
+    function getPelanggaranPerDivisi() { return divisiList.map(d => getPelanggaranDivisi(d.id).length); }
+    function getRewardPerDivisi() {
+        return divisiList.map(d => {
+            if (d.id === 'bahasa') return getBahasaRewardStats().min4;
+            return getRewardDivisi(d.id).length;
+        });
+    }
+
+    // CHART
+    let chartInstance = null;
+    function initChart() {
+        if (chartInstance) chartInstance.destroy();
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        const gridColor = isDarkMode ? '#2a2a3a' : '#e9e6f5';
+        const textColor = isDarkMode ? '#f0f0f0' : '#1e2a3a';
+        chartInstance = new Chart(document.getElementById('divisiChart'), {
+            type: 'bar',
+            data: {
+                labels: divisiList.map(d => d.name),
+                datasets: [
+                    { label: 'Pelanggaran', data: getPelanggaranPerDivisi(), backgroundColor: '#ff8a8a', borderRadius: 10, barPercentage: 0.65 },
+                    { label: 'Reward', data: getRewardPerDivisi(), backgroundColor: '#8bc34a', borderRadius: 10, barPercentage: 0.65 }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: textColor } }, tooltip: { mode: 'index', intersect: false } },
+                scales: { y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor } }, x: { grid: { display: false }, ticks: { color: textColor } } }
+            }
+        });
+    }
+    async function updateDashboard() {
+        document.getElementById('totalPelanggaran').innerText = hitungTotalPelanggaran();
+        document.getElementById('totalReward').innerText = hitungTotalReward();
+        document.getElementById('totalPengajuan').innerText = hitungTotalPengajuan();
+        document.getElementById('totalSantri').innerText = await getTotalSantri();
+        initChart();
+    }
+
+    // ========== USB ==========
+    let usbRootHandle = null;
+    async function initUSB() {
+        if (!usbFileManager.isSupported()) {
+            document.getElementById('usbStatus').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Browser tidak mendukung USB API';
+            return false;
+        }
+        const existing = await usbFileManager.getRootHandle();
+        if (existing) {
+            usbRootHandle = existing;
+            document.getElementById('usbStatus').innerHTML = `<i class="fas fa-check-circle"></i> USB: ${usbRootHandle.name}`;
+            document.getElementById('usbSyncBtn').disabled = false;
+            return true;
+        }
+        return false;
+    }
+    document.getElementById('usbSelectBtn').addEventListener('click', async () => {
+        try {
+            const handle = await usbFileManager.pilihFolder();
+            if (handle) {
+                usbRootHandle = handle;
+                document.getElementById('usbStatus').innerHTML = `<i class="fas fa-check-circle"></i> USB: ${handle.name}`;
+                document.getElementById('usbSyncBtn').disabled = false;
+                await bacaDataDariUSB();
+            } else alert('Tidak ada folder dipilih');
+        } catch(e) { alert('Gagal: '+e.message); }
+    });
+    document.getElementById('usbSyncBtn').addEventListener('click', async () => {
+        if (!usbRootHandle) { alert('Pilih USB dulu'); return; }
+        await bacaDataDariUSB();
+    });
+    async function bacaDataDariUSB() {
+        document.getElementById('usbStatus').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membaca data...';
+        try {
+            let santriData = await usbFileManager.readJSONFile('santri_data.json', null);
+            if (santriData && santriData.length) localStorage.setItem('santri_data.json', JSON.stringify(santriData));
+            for (const divisi of divisiList) {
+                let pel = await usbFileManager.readJSONFile(`data_pelanggaran_${divisi.id}.json`, divisi.folderUSB);
+                if (pel) localStorage.setItem(`data_pelanggaran_${divisi.id}.json`, JSON.stringify(pel));
+                let rew = await usbFileManager.readJSONFile(`data_reward_${divisi.id}.json`, divisi.folderUSB);
+                if (rew) localStorage.setItem(`data_reward_${divisi.id}.json`, JSON.stringify(rew));
+            }
+            let filesRoot = await usbFileManager.listFiles(null);
+            let pengajuanCount = filesRoot.filter(f => f.category === 'pengajuan').length;
+            localStorage.setItem('total_pengajuan', pengajuanCount);
+            await updateDashboard();
+            document.getElementById('usbStatus').innerHTML = `<i class="fas fa-check-circle"></i> USB: ${usbRootHandle.name} (Data diperbarui)`;
+            alert('Data USB berhasil disinkronkan');
+        } catch(err) {
+            document.getElementById('usbStatus').innerHTML = `<i class="fas fa-exclamation-triangle"></i> Gagal: ${err.message}`;
+        }
+    }
+
+    // ========== GOOGLE DRIVE ==========
+    let tokenClient = null, accessToken = null, driveAuth = false, driveClientId = '', driveApiKey = '';
+    function loadDriveConfig() {
+        driveClientId = localStorage.getItem('google_drive_client_id') || '';
+        driveApiKey = localStorage.getItem('google_drive_api_key') || '';
+        let savedToken = localStorage.getItem('gdrive_access_token');
+        if (savedToken) { accessToken = savedToken; driveAuth = true; }
+        updateDriveButtons();
+        if (driveAuth && navigator.onLine) autoSyncAll();
+    }
+    function updateDriveButtons() {
+        let hasConfig = !!(driveClientId && driveApiKey);
+        document.getElementById('loginDriveBtn').disabled = !hasConfig || driveAuth;
+        document.getElementById('syncDriveBtn').disabled = !hasConfig || !driveAuth;
+        document.getElementById('uploadDriveBtn').disabled = !hasConfig || !driveAuth;
+        let statusDiv = document.getElementById('driveStatus');
+        if (!hasConfig) statusDiv.innerHTML = '⚠️ API belum dikonfigurasi';
+        else if (!driveAuth) statusDiv.innerHTML = '🔑 Belum login ke Google Drive';
+        else statusDiv.innerHTML = '✅ Terhubung ke Drive';
+    }
+    function initializeGIS() {
+        if (!driveClientId) return;
+        if (typeof google === 'undefined' || !google.accounts) return;
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: driveClientId,
+            scope: 'https://www.googleapis.com/auth/drive.file',
+            callback: (resp) => {
+                if (resp.error) { driveAuth=false; accessToken=null; localStorage.removeItem('gdrive_access_token'); updateDriveButtons(); return; }
+                accessToken = resp.access_token; driveAuth=true;
+                localStorage.setItem('gdrive_access_token', accessToken);
+                updateDriveButtons();
+                if (navigator.onLine) autoSyncAll();
+            }
+        });
+    }
+    function requestAccessToken() { if (tokenClient) tokenClient.requestAccessToken(); else alert('Konfigurasi API dulu'); }
+    async function getOrCreateDriveFolder(folderName) {
+        if (!accessToken) throw new Error('Belum login');
+        let query = `name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+        let resp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+        let data = await resp.json();
+        if (data.files && data.files.length > 0) return data.files[0].id;
+        let metadata = { name: folderName, mimeType: 'application/vnd.google-apps.folder' };
+        let createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(metadata)
+        });
+        let folder = await createResp.json();
+        if (!folder.id) throw new Error('Gagal membuat folder');
+        return folder.id;
+    }
+    async function uploadToDrive(fileName, data, folderName = null) {
+        if (!accessToken) throw new Error('Belum login');
+        let parentId = folderName ? await getOrCreateDriveFolder(folderName) : null;
+        const fileBlob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const metadata = { name: fileName };
+        if (parentId) metadata.parents = [parentId];
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', fileBlob);
+        const resp = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${accessToken}` },
+            body: form
+        });
+        if (!resp.ok) throw new Error(await resp.text());
+        return true;
+    }
+    async function downloadFromDrive(fileName, folderName = null) {
+        if (!accessToken) throw new Error('Belum login');
+        let query = `name='${fileName}' and trashed=false`;
+        if (folderName) {
+            let folderQuery = `name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+            let folderResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(folderQuery)}&fields=files(id)`, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+            let folderData = await folderResp.json();
+            if (!folderData.files || folderData.files.length === 0) return null;
+            const folderId = folderData.files[0].id;
+            query = `name='${fileName}' and '${folderId}' in parents and trashed=false`;
+        }
+        const listResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+        const listData = await listResp.json();
+        if (!listData.files || listData.files.length === 0) return null;
+        const fileId = listData.files[0].id;
+        const downloadResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+        if (!downloadResp.ok) return null;
+        return await downloadResp.json();
+    }
+    async function syncAllFromDrive() {
+        for (const divisi of divisiList) {
+            let pel = await downloadFromDrive(`data_pelanggaran_${divisi.id}.json`, divisi.folderDrive);
+            if (pel) localStorage.setItem(`data_pelanggaran_${divisi.id}.json`, JSON.stringify(pel));
+            let rew = await downloadFromDrive(`data_reward_${divisi.id}.json`, divisi.folderDrive);
+            if (rew) localStorage.setItem(`data_reward_${divisi.id}.json`, JSON.stringify(rew));
+        }
+        let santri = await downloadFromDrive('santri_data.json', null);
+        if (santri && santri.length) localStorage.setItem('santri_data.json', JSON.stringify(santri));
+        await updateDashboard();
+    }
+    async function uploadAllToDrive() {
+        for (const divisi of divisiList) {
+            let pel = localStorage.getItem(`data_pelanggaran_${divisi.id}.json`);
+            if (pel) await uploadToDrive(`data_pelanggaran_${divisi.id}.json`, JSON.parse(pel), divisi.folderDrive);
+            let rew = localStorage.getItem(`data_reward_${divisi.id}.json`);
+            if (rew) await uploadToDrive(`data_reward_${divisi.id}.json`, JSON.parse(rew), divisi.folderDrive);
+        }
+        let santri = localStorage.getItem('santri_data.json');
+        if (santri) await uploadToDrive('santri_data.json', JSON.parse(santri), null);
+        alert('Upload ke Drive selesai');
+    }
+    async function autoSyncAll() {
+        if (!driveAuth) return;
+        document.getElementById('driveStatus').innerHTML = '🔄 Menyinkronkan...';
+        try { await syncAllFromDrive(); document.getElementById('driveStatus').innerHTML = '✅ Selesai'; } catch(e) { document.getElementById('driveStatus').innerHTML = '❌ Gagal: '+e.message; }
+    }
+    document.getElementById('configDriveBtn').addEventListener('click', () => {
+        let id = prompt('Client ID', driveClientId);
+        let key = prompt('API Key', driveApiKey);
+        if (id) driveClientId = id.trim();
+        if (key) driveApiKey = key.trim();
+        localStorage.setItem('google_drive_client_id', driveClientId);
+        localStorage.setItem('google_drive_api_key', driveApiKey);
+        accessToken = null; driveAuth = false; tokenClient = null; localStorage.removeItem('gdrive_access_token');
+        if (driveClientId) initializeGIS();
+        updateDriveButtons();
+    });
+    document.getElementById('loginDriveBtn').addEventListener('click', () => { if(driveClientId){ if(!tokenClient) initializeGIS(); requestAccessToken(); } else alert('Konfigurasi API dulu'); });
+    document.getElementById('syncDriveBtn').addEventListener('click', async () => { if(!driveAuth) return alert('Login dulu'); await syncAllFromDrive(); alert('Data dari Drive diambil'); });
+    document.getElementById('uploadDriveBtn').addEventListener('click', async () => { if(!driveAuth) return alert('Login dulu'); await uploadAllToDrive(); });
+
+    // ========== HAPUS SEMUA DATA ==========
+    async function hapusSemuaData() {
+        const pwd = prompt('Masukkan password untuk menghapus semua data (kecuali santri_data.json):');
+        if (pwd !== 'lugoh123') { alert('Password salah!'); return; }
+        if (!confirm('PERINGATAN: Ini akan menghapus SEMUA data pelanggaran, reward, dan pengajuan dari localStorage, USB, dan Google Drive.\nFile santri_data.json TIDAK akan dihapus.\nLanjutkan?')) return;
+        // 1. Hapus localStorage
+        for (const divisi of divisiList) {
+            localStorage.removeItem(`data_pelanggaran_${divisi.id}.json`);
+            localStorage.removeItem(`data_reward_${divisi.id}.json`);
+        }
+        localStorage.removeItem('total_pengajuan');
+        localStorage.removeItem('pengajuan_files');
+        // 2. Hapus dari USB (semua file kecuali santri_data.json)
+        if (usbRootHandle) {
+            try {
+                for (const divisi of divisiList) {
+                    const files = await usbFileManager.listFiles(divisi.folderUSB);
+                    for (const f of files) {
+                        if (f.name !== 'santri_data.json' && f.name !== 'pengajuan_status.json') {
+                            await usbFileManager.deleteFile(f.handle);
+                        }
+                    }
+                }
+                // Hapus file pengajuan di root
+                const rootFiles = await usbFileManager.listFiles(null);
+                for (const f of rootFiles) {
+                    if (f.name !== 'santri_data.json' && f.name !== 'pengajuan_status.json' && !f.name.startsWith('.')) {
+                        await usbFileManager.deleteFile(f.handle);
+                    }
+                }
+            } catch(e) { console.warn('USB delete error:', e); }
+        }
+        // 3. Hapus dari Google Drive
+        if (driveAuth && accessToken) {
+            try {
+                for (const divisi of divisiList) {
+                    const folderId = await getOrCreateDriveFolder(divisi.folderDrive);
+                    const listResp = await fetch(`https://www.googleapis.com/drive/v3/files?q='${folderId}' in parents and trashed=false&fields=files(id,name)`, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+                    const data = await listResp.json();
+                    if (data.files) {
+                        for (const file of data.files) {
+                            if (file.name !== 'santri_data.json') {
+                                await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${accessToken}` } });
+                            }
+                        }
+                    }
+                }
+                // Hapus file di root
+                const rootResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=trashed=false and name != 'santri_data.json'&fields=files(id,name)`, { headers: { 'Authorization': `Bearer ${accessToken}` } });
+                const rootData = await rootResp.json();
+                if (rootData.files) {
+                    for (const file of rootData.files) {
+                        if (file.name !== 'santri_data.json') {
+                            await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${accessToken}` } });
+                        }
+                    }
+                }
+            } catch(e) { console.warn('Drive delete error:', e); }
+        }
+        alert('Semua data (kecuali santri_data.json) telah dihapus dari localStorage, USB, dan Drive.');
+        await updateDashboard();
+    }
+    document.getElementById('deleteAllDataBtn').addEventListener('click', hapusSemuaData);
+
+    // ========== INISIALISASI ==========
+    updateDashboard();
+    loadDriveConfig();
+    if (driveClientId) initializeGIS();
+    initUSB();
+</script>
+</body>
+</html>

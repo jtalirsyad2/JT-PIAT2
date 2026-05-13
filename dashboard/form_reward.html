@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Input Reward | Divisi Bahasa</title>
+    <!-- CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="../../src/usbFileManager.js"></script>
+    <style>
+        @font-face { font-family: 'Sakkal Majalla'; src: local('Sakkal Majalla'), local('Traditional Arabic'); font-weight: normal; }
+        * { transition: background-color 0.2s ease, color 0.2s ease; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #f5f3ff; color: #1e1b2f; }
+        body.dark { background-color: #121212; color: #f0f0f0; }
+        body.dark .card, body.dark .modal-content { background-color: #1e2a3a; border-color: #334152; color: #fff; }
+        body.dark .table, body.dark .table td, body.dark .table th { background-color: #1a1a2e; color: #e0e0e0; border-color: #2a2a4a; }
+        body.dark .table thead th { background-color: #0f0f1a; color: #fff; }
+        body.dark .text-muted { color: #adb5bd !important; }
+        body.dark .btn-outline-secondary { color: #fff; border-color: #4a627a; }
+        body.dark .form-control, body.dark .form-select { background-color: #2a2a3a; border-color: #3a3a4a; color: #fff; }
+        body.dark .ac-list { background-color: #1e2a3a; border-color: #334152; }
+        body.dark .ac-item:hover { background-color: #2a3a4a; }
+        .sidebar { width: 260px; background: #fff; position: fixed; top: 0; left: 0; height: 100vh; box-shadow: 2px 0 12px rgba(0,0,0,0.05); z-index: 1000; }
+        body.dark .sidebar { background: #0f172a; }
+        .sidebar a { color: #2d3a4b; padding: 0.75rem 1rem; display: block; text-decoration: none; font-weight: 500; }
+        body.dark .sidebar a { color: #cbd5e6; }
+        .sidebar a:hover { background: #f0edff; }
+        body.dark .sidebar a:hover { background: #1e2a3a; }
+        .sidebar .active { background: #e9e6ff; color: #5e4bcc; border-left: 3px solid #5e4bcc; }
+        body.dark .sidebar .active { background: #2d3e5a; color: #b9aaff; }
+        .main-content { margin-left: 260px; }
+        @media (max-width: 768px) { .sidebar { transform: translateX(-100%); transition: 0.2s; } .sidebar.show { transform: translateX(0); } .main-content { margin-left: 0; } }
+        .header { background: #fff; padding: 0.6rem 1.2rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 99; }
+        body.dark .header { background: #0a0a12; border-bottom-color: #2a2a3a; }
+        .navbar-classic { display: flex; justify-content: space-between; width: 100%; }
+        #nav-toggle { color: #2d3a4b; font-size: 1.2rem; cursor: pointer; }
+        body.dark #nav-toggle { color: #fff; }
+        .avatar-md { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+        .footer { background: #fefcff; border-top: 1px solid #e9e6f5; text-align: center; padding: 1rem 0; margin-top: 2rem; font-size: 0.8rem; }
+        body.dark .footer { background: #0f172a; border-top-color: #1e293b; }
+        .datetime-container { background: #f0edff; border-radius: 2rem; padding: 0.4rem 1rem; display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
+        body.dark .datetime-container { background: #1e2a3a; color: #e0e0e0; }
+        .arabic-clock { font-family: 'Sakkal Majalla', 'Traditional Arabic', serif; font-size: 1rem; }
+        .btn-pastel-primary { background: #b7abff; border: none; color: white; border-radius: 2rem; padding: 0.5rem 1.2rem; transition: 0.2s; }
+        body.dark .btn-pastel-primary { background: #5e4bcc; }
+        .btn-pastel-primary:hover { background: #a094f0; transform: translateY(-2px); }
+        .btn-pastel-success { background: #c8e6c9; border: none; color: #1e1b2f; border-radius: 2rem; padding: 0.5rem 1rem; }
+        body.dark .btn-pastel-success { background: #2e7d32; color: white; }
+        .btn-pastel-danger { background: #ffcdd2; border: none; color: #c62828; border-radius: 2rem; }
+        body.dark .btn-pastel-danger { background: #c62828; color: white; }
+        .btn-pastel-info { background: #b3e5fc; border: none; color: #1e1b2f; border-radius: 2rem; }
+        body.dark .btn-pastel-info { background: #0288d1; color: white; }
+        .btn-pastel-warning { background: #ffe0b2; border: none; color: #e65100; border-radius: 2rem; }
+        .ac-wrapper { position: relative; }
+        .ac-list { position: absolute; left: 0; right: 0; z-index: 1050; background: white; border: 1px solid #dee2e6; border-radius: 0.5rem; margin-top: 4px; max-height: 260px; overflow-y: auto; }
+        .ac-item { padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid #f1f1f1; display: flex; flex-direction: column; }
+        .ac-item:hover { background: #f8f9fa; }
+        .ac-sub { font-size: 0.75rem; color: #5e4bcc; margin-top: 4px; }
+        .kelas-badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 30px; font-size: 0.7rem; font-weight: 600; }
+        .kelas-vii { background: #e3f2fd; color: #0d47a1; }
+        .kelas-viii { background: #e8f5e9; color: #1e5e2e; }
+        .kelas-ix { background: #fff3e0; color: #b75d0a; }
+        .kelas-il { background: #e0f7fa; color: #006064; }
+        .kelas-x { background: #ede7f6; color: #512da8; }
+        .kelas-xi { background: #fbe9e7; color: #bf360c; }
+        .kelas-xii { background: #ffebee; color: #b71c1c; }
+        body.dark .kelas-vii { background: #1a3a5c; color: #90caf9; }
+        body.dark .kelas-viii { background: #1a4a2a; color: #a5d6a7; }
+        body.dark .kelas-ix { background: #5a3a1a; color: #ffcc80; }
+        body.dark .kelas-il { background: #1a5a5a; color: #80deea; }
+        body.dark .kelas-x { background: #2a1a5a; color: #b39ddb; }
+        body.dark .kelas-xi { background: #5a1a1a; color: #ffab91; }
+        body.dark .kelas-xii { background: #5a1a2a; color: #ef9a9a; }
+        .prestasi-badge { background: #ffd700; color: #1e1b2f; padding: 0.2rem 0.5rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; margin-left: 0.5rem; }
+        body.dark .prestasi-badge { background: #ffc107; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div id="db-wrapper">
+    <div class="sidebar" id="sidebar">
+        <div class="p-3"><h4 class="fw-bold">Divisi Bahasa</h4></div>
+        <ul class="nav flex-column">
+            <li><a href="pusat_data.html"><i class="fas fa-database me-2"></i> Darur Rekap</a></li>
+            <li><a href="daftar_santri.html"><i class="fas fa-users me-2"></i> Daftar Santri</a></li>
+            <li><a href="tentang.html"><i class="fas fa-info-circle me-2"></i> Tentang</a></li>
+            <li><div class="navbar-heading text-muted small px-3 mt-3">Form Input</div></li>
+            <li><a href="form_pelanggaran.html"><i class="fas fa-exclamation-triangle me-2"></i> Input Pelanggaran</a></li>
+            <li><a class="active" href="form_reward.html"><i class="fas fa-gift me-2"></i> Input Reward</a></li>
+            <li><a href="arabic_keyboard.html"><i class="fas fa-keyboard me-2"></i> Keyboard Arab</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div class="navbar-classic">
+                <a id="nav-toggle" href="#"><i class="fas fa-bars"></i></a>
+                <div class="d-flex align-items-center gap-3">
+                    <button id="darkModeBtn" class="btn btn-sm btn-outline-secondary"><i class="fas fa-moon"></i></button>
+                    <div class="dropdown">
+                        <a href="#" data-bs-toggle="dropdown"><img src="../../assets/images/avatar/default.jpg" class="avatar-md" id="userAvatar"></a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <div class="px-3 py-2"><strong id="userFullName">User</strong><br><span class="small text-muted" id="userRole"></span></div>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="settings.html">Pengaturan</a>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout()">Keluar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid px-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h3 class="fw-semibold">Form Input Reward <span class="badge bg-secondary ms-2">Divisi Bahasa</span></h3>
+                <div class="datetime-container"><i class="far fa-clock"></i><span id="jamIndo">--:--:--</span><span class="arabic-clock" id="jamArab">--:--:--</span></div>
+            </div>
+
+            <!-- USB Opsional -->
+            <div class="mb-3">
+                <button id="folderStatusBtn" class="btn btn-pastel-primary"><i class="fas fa-folder-open me-2"></i><span id="folderStatus">Pilih USB (Cadangan)</span></button>
+            </div>
+
+            <!-- Form Input Reward -->
+            <div class="card p-4 mb-4">
+                <form id="formRecord" onsubmit="return false;">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label"><i class="fas fa-calendar me-1"></i> Tanggal</label>
+                            <input type="date" class="form-control" id="inp_tanggal" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><i class="fas fa-gift me-1"></i> Reward</label>
+                            <select class="form-select" id="inp_reward" required>
+                                <option value="">-- pilih --</option>
+                                <option value="Hiwar Jama'i">Hiwar Jama'i</option>
+                                <option value="Daur Lughoh">Daur Lughoh</option>
+                                <option value="Santri Berprestasi">Santri Berprestasi ⭐ (bobot 4x)</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                            <small class="text-muted" id="rewardInfo"></small>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><i class="fas fa-user-check me-1"></i> Pencatat</label>
+                            <input class="form-control" id="inp_pencatat" placeholder="Nama guru / musrif" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label"><i class="fas fa-map-pin me-1"></i> Tempat (opsional)</label>
+                            <input class="form-control" id="inp_tempat" placeholder="Ruang bahasa, kantin...">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="fas fa-id-card me-1"></i> NIS</label>
+                            <select class="form-select" id="inp_nis"></select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="fas fa-user-graduate me-1"></i> Nama Santri</label>
+                            <div class="ac-wrapper">
+                                <input class="form-control" id="inp_nama" type="text" placeholder="Ketik nama atau NIS..." autocomplete="off">
+                                <div id="ac_list" class="ac-list" style="display:none"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="fas fa-layer-group me-1"></i> Kelas</label>
+                            <select class="form-select" id="inp_kelas"></select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label"><i class="fas fa-pen me-1"></i> Keterangan</label>
+                            <textarea class="form-control" id="inp_keterangan" rows="3" placeholder="Catatan tambahan..."></textarea>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-end mt-4">
+                        <button type="button" id="btn_add" class="btn btn-pastel-primary"><i class="fas fa-plus-circle me-1"></i> Tambah</button>
+                        <button type="button" id="btn_clear" class="btn btn-outline-secondary"><i class="fas fa-eraser me-1"></i> Bersihkan</button>
+                        <button type="button" id="btn_export" class="btn btn-pastel-success"><i class="fas fa-file-csv me-1"></i> CSV</button>
+                        <button type="button" id="btn_export_xlsx" class="btn btn-pastel-success"><i class="fas fa-file-excel me-1"></i> XLSX</button>
+                        <button type="button" id="btn_print" class="btn btn-outline-secondary"><i class="fas fa-print me-1"></i> Cetak</button>
+                        <button type="button" id="btn_upload_pusat" class="btn btn-pastel-info"><i class="fas fa-database me-1"></i> Upload ke Pusat Data</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tabel Reward (dengan kolom Poin dan filter Min Poin) -->
+            <div class="card p-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+                    <h5><i class="fas fa-list-alt me-2 text-primary"></i> Daftar Reward <span class="badge bg-secondary" id="totalRewardCount">0</span></h5>
+                    <button onclick="deleteAllRecords()" class="btn btn-pastel-danger btn-sm"><i class="fas fa-trash-can me-1"></i> Hapus Semua</button>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-5">
+                        <input id="search_name" type="text" class="form-control" placeholder="Cari berdasarkan nama, NIS, atau kelas...">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filterKelas" class="form-select">
+                            <option value="">Semua Kelas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="minRepeat" class="form-select">
+                            <option value="0">Min. Poin: Semua</option>
+                            <option value="2">≥ 2 Poin</option>
+                            <option value="4" selected>≥ 4 Poin</option>
+                            <option value="6">≥ 6 Poin</option>
+                        </select>
+                        <small class="text-muted">*Santri Berprestasi = 4 poin</small>
+                    </div>
+                    <div class="col-md-1">
+                        <button id="refreshFilterBtn" class="btn btn-outline-secondary w-100" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="tblRecords">
+                        <thead class="table-light">
+                            <tr>
+                                <th onclick="sortTable('no')"># <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('tanggal')">Tanggal <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('nis')">NIS <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('nama')">Nama <i class="fas fa-sort"></i></th>
+                                <th onclick="sortByKelas()">Kelas <i class="fas fa-sort"></i></th>
+                                <th onclick="sortTable('reward')">Reward <i class="fas fa-sort"></i></th>
+                                <th>Pencatat</th><th>Tempat</th><th>Keterangan</th>
+                                <th onclick="sortTable('poin')">Poin <i class="fas fa-sort"></i></th><th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblBody"></tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted small">Menampilkan <span id="showingStart">0</span>–<span id="showingEnd">0</span> dari <span id="totalRecords">0</span> reward</div>
+                    <div><button id="prevPageBtn" class="btn btn-outline-secondary btn-sm" disabled><i class="fas fa-chevron-left"></i> Sebelumnya</button><span class="badge bg-light text-dark mx-2" id="pageInfo">Halaman 1 / 1</span><button id="nextPageBtn" class="btn btn-outline-secondary btn-sm" disabled>Selanjutnya <i class="fas fa-chevron-right"></i></button></div>
+                </div>
+            </div>
+
+            <!-- Google Drive Sync (folder Bahasa) -->
+            <div class="card p-3">
+                <h5><i class="fab fa-google-drive me-2" style="color:#4285F4;"></i> Sinkronisasi Google Drive <span class="badge bg-info">Folder DivisiBahasa</span></h5>
+                <div class="row g-3 mt-2">
+                    <div class="col-md-3"><button id="configDriveBtn" class="btn btn-pastel-warning w-100"><i class="fas fa-cog"></i> Konfigurasi API</button></div>
+                    <div class="col-md-3"><button id="loginDriveBtn" class="btn btn-pastel-primary w-100" disabled><i class="fab fa-google"></i> Login Google</button></div>
+                    <div class="col-md-3"><button id="syncDriveBtn" class="btn btn-pastel-info w-100" disabled><i class="fas fa-sync"></i> Ambil dari Drive</button></div>
+                    <div class="col-md-3"><button id="uploadDriveBtn" class="btn btn-pastel-success w-100" disabled><i class="fas fa-cloud-upload-alt"></i> Simpan ke Drive</button></div>
+                    <div class="col-12 mt-2"><div id="driveStatus" class="small text-muted"></div></div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer text-center py-3">© LEGION 8.0 | Divisi Bahasa | Offline-ready</footer>
+    </div>
+</div>
+
+<script>
+    (function() {
+        "use strict";
+        // ========== IDENTITAS DIVISI ==========
+        const DIVISI_ID = 'bahasa';
+        const DRIVE_FOLDER_NAME = 'DivisiBahasa';
+        const FILE_REWARD = 'data_reward_bahasa.json';
+        const FILE_SANTRI = 'santri_data.json';
+
+        // ========== VALIDASI AKSES ==========
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) { window.location.href = '../../login.html'; return; }
+        if (currentUser.divisiId !== DIVISI_ID && currentUser.role !== 'superadmin') {
+            alert('Anda tidak memiliki akses ke divisi ini.');
+            window.location.href = '../../dashboard/index.html';
+            return;
+        }
+        document.getElementById('userFullName').innerText = currentUser.name;
+        document.getElementById('userRole').innerText = currentUser.role === 'admin' ? 'Administrator' : (currentUser.role === 'guru' ? 'Guru' : 'Pengurus');
+        let avatarSrc = currentUser.avatar ? `../../assets/images/avatar/${currentUser.avatar}` : '../../assets/images/avatar/default.jpg';
+        document.getElementById('userAvatar').src = avatarSrc;
+        window.logout = () => { if(confirm('Keluar?')){ localStorage.removeItem('currentUser'); localStorage.removeItem('rememberedUser'); window.location.href='../../login.html'; } };
+
+        // ========== DARK MODE & JAM ==========
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        if(darkMode) document.body.classList.add('dark');
+        document.getElementById('darkModeBtn')?.addEventListener('click',()=>{ document.body.classList.toggle('dark'); localStorage.setItem('darkMode',document.body.classList.contains('dark')); });
+        document.getElementById('nav-toggle')?.addEventListener('click',()=>{ document.getElementById('sidebar').classList.toggle('show'); });
+        function updateClock() { const now = new Date(); document.getElementById('jamIndo').innerText = now.toLocaleTimeString('id-ID'); document.getElementById('jamArab').innerText = now.toLocaleTimeString('ar-SA'); }
+        updateClock(); setInterval(updateClock, 1000);
+
+        // ========== DATA STORAGE ==========
+        let records = JSON.parse(localStorage.getItem(FILE_REWARD) || "[]");
+        let santriList = JSON.parse(localStorage.getItem(FILE_SANTRI) || "[]");
+        let currentPage = 1, itemsPerPage = 15, filteredRecords = [], sortColumn = 'tanggal', sortAsc = false, kelasSortAsc = true;
+        const kelasOrder = { 'VII':1, 'VIII':2, 'IX':3, 'IL':4, 'X':5, 'XI':6, 'XII':7 };
+
+        function getRewardPoint(rewardName) { return rewardName === 'Santri Berprestasi' ? 4 : 1; }
+
+        async function loadDefaultSantri() {
+            try {
+                let resp = await fetch('../../src/students-data.js');
+                let text = await resp.text();
+                eval(text);
+                if(students && students.length) { localStorage.setItem(FILE_SANTRI, JSON.stringify(students)); santriList = students; }
+            } catch(e) {}
+            updateSantriDropdown();
+        }
+        if(!santriList.length) loadDefaultSantri();
+        function updateSantriDropdown() {
+            let nisSelect = document.getElementById('inp_nis');
+            nisSelect.innerHTML = '<option value="">-- pilih --</option>';
+            [...new Set(santriList.map(s => s.nis))].sort().forEach(nis => nisSelect.appendChild(new Option(nis, nis)));
+            let kelasSelect = document.getElementById('inp_kelas');
+            kelasSelect.innerHTML = '<option value="">-- pilih --</option>';
+            [...new Set(santriList.map(s => s.kelas))].sort().forEach(kelas => kelasSelect.appendChild(new Option(kelas, kelas)));
+        }
+
+        // ========== AUTOCOMPLETE ==========
+        let acItems = [], acIndex = -1;
+        function normalize(s) { return (s||'').trim().toLowerCase(); }
+        function escapeHtml(s) { return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+        function showAc(matches) {
+            let acList = document.getElementById('ac_list');
+            acList.innerHTML = '';
+            if(!matches.length) { acList.style.display = 'none'; return; }
+            matches.forEach((m,i) => {
+                let div = document.createElement('div');
+                div.className = 'ac-item';
+                div.innerHTML = '<div style="font-weight:600;">'+escapeHtml(m.name)+'</div><div class="ac-sub">'+escapeHtml(m.kelas)+' • '+escapeHtml(m.nis)+'</div>';
+                div.onmousedown = (e) => { e.preventDefault(); chooseAc(i); };
+                acList.appendChild(div);
+            });
+            acList.style.display = 'block';
+        }
+        function chooseAc(i) { let s = acItems[i]; if(s) { document.getElementById('inp_nama').value = s.name; document.getElementById('inp_nis').value = s.nis; document.getElementById('inp_kelas').value = s.kelas; document.getElementById('ac_list').style.display = 'none'; } }
+        let inpNama = document.getElementById('inp_nama');
+        inpNama.addEventListener('input', function() {
+            let q = normalize(this.value);
+            if(!q) { document.getElementById('ac_list').style.display = 'none'; return; }
+            acItems = santriList.filter(s => normalize(s.name).includes(q) || normalize(s.nis).includes(q)).slice(0,50);
+            showAc(acItems);
+        });
+        inpNama.addEventListener('keydown', (e) => {
+            let acList = document.getElementById('ac_list');
+            if(acList.style.display !== 'block') return;
+            if(e.key === 'ArrowDown') { e.preventDefault(); acIndex = Math.min(acIndex+1, acItems.length-1); highlightAc(); }
+            else if(e.key === 'ArrowUp') { e.preventDefault(); acIndex = Math.max(acIndex-1, 0); highlightAc(); }
+            else if(e.key === 'Enter') { e.preventDefault(); if(acIndex>=0) chooseAc(acIndex); }
+            else if(e.key === 'Escape') { acList.style.display = 'none'; }
+        });
+        inpNama.addEventListener('blur', () => setTimeout(() => document.getElementById('ac_list').style.display = 'none', 200));
+        function highlightAc() { Array.from(document.getElementById('ac_list').children).forEach((c,i) => c.classList.toggle('active', i===acIndex)); if(acIndex>=0 && document.getElementById('ac_list').children[acIndex]) document.getElementById('ac_list').children[acIndex].scrollIntoView({block:'nearest'}); }
+        document.getElementById('inp_nis').addEventListener('change', function() { let s = santriList.find(x => x.nis == this.value); if(s) { inpNama.value = s.name; document.getElementById('inp_kelas').value = s.kelas; } else { inpNama.value = ''; document.getElementById('inp_kelas').value = ''; } });
+        document.getElementById('inp_reward').addEventListener('change', function() {
+            let info = document.getElementById('rewardInfo');
+            if(this.value === 'Santri Berprestasi') info.innerHTML = '<span class="prestasi-badge"><i class="fas fa-star"></i> Bobot 4 poin (setara 4x reward biasa)</span>';
+            else info.innerHTML = '';
+        });
+
+        // ========== CRUD & RENDER ==========
+        function saveRecords() { localStorage.setItem(FILE_REWARD, JSON.stringify(records)); renderTable(); }
+        function formatTanggal(iso) { if(!iso) return ''; let p = iso.split('-'); return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : iso; }
+        function getKelasClass(k) { if(k.includes('VII')) return 'kelas-vii'; if(k.includes('VIII')) return 'kelas-viii'; if(k.includes('IX')) return 'kelas-ix'; if(k.includes('IL')) return 'kelas-il'; if(k.includes('X')) return 'kelas-x'; if(k.includes('XI')) return 'kelas-xi'; if(k.includes('XII')) return 'kelas-xii'; return ''; }
+        function getTotalPoin() { let poinMap = {}; records.forEach(r => poinMap[r.nis] = (poinMap[r.nis]||0) + getRewardPoint(r.reward)); return poinMap; }
+        function applyFilterAndSort() {
+            let filtered = records;
+            let q = document.getElementById('search_name').value.toLowerCase().trim();
+            if(q) filtered = filtered.filter(r => (r.nama||'').toLowerCase().includes(q) || (r.nis||'').includes(q) || (r.kelas||'').toLowerCase().includes(q));
+            let kelasVal = document.getElementById('filterKelas').value;
+            if(kelasVal) filtered = filtered.filter(r => r.kelas === kelasVal);
+            let minPoin = parseInt(document.getElementById('minRepeat').value) || 0;
+            if(minPoin > 0) { let poinMap = getTotalPoin(); filtered = filtered.filter(r => (poinMap[r.nis]||0) >= minPoin); }
+            if(sortColumn === 'kelas') {
+                filtered.sort((a,b) => { let aOrd = kelasOrder[(a.kelas||'').split(' ')[0]] || 999, bOrd = kelasOrder[(b.kelas||'').split(' ')[0]] || 999; if(aOrd !== bOrd) return kelasSortAsc ? aOrd - bOrd : bOrd - aOrd; return kelasSortAsc ? (a.kelas||'').localeCompare(b.kelas||'') : (b.kelas||'').localeCompare(a.kelas||''); });
+            } else if(sortColumn === 'poin') {
+                let poinMap = getTotalPoin();
+                filtered.sort((a,b) => (sortAsc ? (poinMap[a.nis]||0) - (poinMap[b.nis]||0) : (poinMap[b.nis]||0) - (poinMap[a.nis]||0)));
+            } else {
+                filtered.sort((a,b) => { let A = a[sortColumn]||'', B = b[sortColumn]||''; if(sortColumn === 'tanggal') { A = new Date(A).getTime()||0; B = new Date(B).getTime()||0; } else if(sortColumn === 'nis') { A = String(A).padStart(10,'0'); B = String(B).padStart(10,'0'); } else { A = String(A).toLowerCase(); B = String(B).toLowerCase(); } return sortAsc ? (A>B?1:-1) : (A<B?1:-1); });
+            }
+            filteredRecords = filtered; return filtered;
+        }
+        function renderTable() {
+            let filtered = applyFilterAndSort();
+            let total = filtered.length, totalPages = Math.ceil(total/itemsPerPage)||1;
+            if(currentPage > totalPages) currentPage = totalPages;
+            let start = (currentPage-1)*itemsPerPage, end = Math.min(start+itemsPerPage, total);
+            let pageData = filtered.slice(start, end);
+            let poinMap = getTotalPoin();
+            let tbody = document.getElementById('tblBody');
+            tbody.innerHTML = '';
+            pageData.forEach((r, idx) => {
+                let rowIdx = start+idx+1;
+                let rewardDisplay = r.reward;
+                if(r.reward === 'Santri Berprestasi') rewardDisplay += ' <span class="prestasi-badge">⭐4x</span>';
+                tbody.innerHTML += `<tr>
+                    <td class="text-center">${rowIdx}</td>
+                    <td>${formatTanggal(r.tanggal)||''}</td>
+                    <td>${r.nis||''}</td>
+                    <td>${escapeHtml(r.nama||'')}</td>
+                    <td><span class="kelas-badge ${getKelasClass(r.kelas)}">${r.kelas||''}</span></td>
+                    <td>${rewardDisplay}</td>
+                    <td>${escapeHtml(r.pencatat||'')}</td>
+                    <td>${escapeHtml(r.tempat||'')}</td>
+                    <td>${escapeHtml(r.keterangan||'')}</td>
+                    <td class="text-center"><strong>${poinMap[r.nis]||0}</strong></td>
+                    <td><button data-i='${records.indexOf(r)}' class="btn btn-sm btn-pastel-danger del"><i class="fas fa-trash"></i> Hapus</button></td>
+                </tr>`;
+            });
+            document.getElementById('showingStart').textContent = total ? start+1 : 0;
+            document.getElementById('showingEnd').textContent = end;
+            document.getElementById('totalRecords').textContent = total;
+            document.getElementById('totalRewardCount').textContent = records.length;
+            document.getElementById('pageInfo').textContent = `Halaman ${currentPage} / ${totalPages||1}`;
+            document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+            document.getElementById('nextPageBtn').disabled = currentPage >= totalPages || totalPages === 0;
+            document.querySelectorAll('.del').forEach(btn => btn.addEventListener('click', (e) => { let i = Number(e.currentTarget.dataset.i); if(confirm('Hapus reward ini?')) { records.splice(i,1); saveRecords(); } }));
+        }
+        window.deleteAllRecords = () => { if(confirm('Hapus semua data reward?')) { records = []; saveRecords(); } };
+        window.sortTable = (col) => { if(col === 'kelas') return sortByKelas(); if(col === 'no') return; if(sortColumn === col) sortAsc = !sortAsc; else { sortColumn = col; sortAsc = true; } renderTable(); };
+        window.sortByKelas = () => { sortColumn = 'kelas'; kelasSortAsc = !kelasSortAsc; renderTable(); };
+        document.getElementById('btn_add').addEventListener('click', () => {
+            let tanggal = document.getElementById('inp_tanggal').value;
+            let nis = document.getElementById('inp_nis').value;
+            let nama = inpNama.value.trim();
+            let kelas = document.getElementById('inp_kelas').value;
+            let reward = document.getElementById('inp_reward').value;
+            let pencatat = document.getElementById('inp_pencatat').value;
+            let tempat = document.getElementById('inp_tempat').value;
+            let keterangan = document.getElementById('inp_keterangan').value;
+            if(!tanggal || !nama || !nis || !reward || !pencatat) { alert('Isi semua field wajib!'); return; }
+            records.push({ tanggal, nis, nama, kelas, reward, pencatat, tempat, keterangan });
+            saveRecords();
+            document.getElementById('inp_keterangan').value = ''; document.getElementById('inp_tempat').value = ''; inpNama.value = ''; document.getElementById('inp_nis').value = ''; document.getElementById('inp_kelas').value = ''; document.getElementById('inp_reward').value = ''; document.getElementById('rewardInfo').innerHTML = ''; document.getElementById('inp_pencatat').focus();
+        });
+        document.getElementById('btn_clear').addEventListener('click', () => {
+            document.getElementById('formRecord').reset();
+            document.getElementById('inp_tanggal').value = new Date().toISOString().slice(0,10);
+            inpNama.value = ''; document.getElementById('ac_list').style.display = 'none';
+            document.getElementById('inp_nis').value = ''; document.getElementById('inp_kelas').value = ''; document.getElementById('rewardInfo').innerHTML = '';
+        });
+        document.getElementById('btn_export').addEventListener('click', () => {
+            let headers = ['tanggal','nis','nama','kelas','reward','pencatat','tempat','keterangan'];
+            let csv = [headers.join(',')];
+            records.forEach(r => csv.push(headers.map(h => { let v = r[h]||''; if(h==='tanggal') v = formatTanggal(v); return `"${v.replace(/"/g,'""')}"`; }).join(',')));
+            let blob = new Blob([csv.join('\n')], {type:'text/csv'}); let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'reward.csv'; a.click();
+        });
+        document.getElementById('btn_export_xlsx').addEventListener('click', () => {
+            let header = ["Tanggal","NIS","Nama","Kelas","Reward","Pencatat","Tempat","Keterangan"];
+            let data = records.map(r => [formatTanggal(r.tanggal||""), r.nis||"", r.nama||"", r.kelas||"", r.reward||"", r.pencatat||"", r.tempat||"", r.keterangan||""]);
+            let ws = XLSX.utils.aoa_to_sheet([header, ...data]); let wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Laporan"); XLSX.writeFile(wb, "reward.xlsx");
+        });
+        document.getElementById('btn_print').addEventListener('click', () => {
+            let poinMap = getTotalPoin();
+            let html = `<html><head><meta charset="utf-8"><title>Laporan Reward</title><style>table{border-collapse:collapse} th,td{border:1px solid #000;padding:5px}</style></head><body><h3>Laporan Reward Divisi Bahasa</h3><table><thead><tr><th>No</th><th>Tanggal</th><th>NIS</th><th>Nama</th><th>Kelas</th><th>Reward</th><th>Pencatat</th><th>Tempat</th><th>Keterangan</th><th>Poin</th></tr></thead><tbody>`;
+            records.forEach((r,i) => html += `<tr><td class="text-center">${i+1}</td><td>${formatTanggal(r.tanggal)||''}<td><td>${r.nis||''}</td><td>${r.nama||''}</td><td>${r.kelas||''}</td><td>${r.reward||''}</td><td>${r.pencatat||''}</td><td>${r.tempat||''}</td><td>${r.keterangan||''}</td><td class="text-center">${poinMap[r.nis]||0}</td></tr>`);
+            html += `</tbody></table></body></html>`;
+            let w = window.open('','_blank'); w.document.write(html); w.document.close(); w.focus(); w.print();
+        });
+        document.getElementById('btn_upload_pusat').addEventListener('click', () => { if(confirm('Simpan data ke Pusat Data (localStorage) dan buka halaman utama?')) window.location.href = 'pusat_data.html'; });
+
+        // ========== USB (SUBFOLDER) ==========
+        async function ensureFolder(showAlert=true) {
+            if(!usbFileManager.isSupported()) { if(showAlert) alert('Browser tidak mendukung USB'); return null; }
+            let handle = await usbFileManager.getRootHandle();
+            if(!handle) handle = await usbFileManager.pilihFolder();
+            if(!handle && showAlert) alert('Pilih folder USB (root)');
+            return handle;
+        }
+        async function loadFromUSB() {
+            let handle = await ensureFolder(false);
+            if(!handle) return;
+            try { let rew = await usbFileManager.readJSONFile(FILE_REWARD, DIVISI_ID); if(rew) { records = rew; saveRecords(); } } catch(e) {}
+            try { let s = await usbFileManager.readJSONFile(FILE_SANTRI, null); if(s && s.length) { localStorage.setItem(FILE_SANTRI, JSON.stringify(s)); santriList = s; updateSantriDropdown(); } } catch(e) {}
+            renderTable();
+        }
+        document.getElementById('folderStatusBtn').addEventListener('click', async() => {
+            let handle = await ensureFolder(true);
+            if(handle) { document.getElementById('folderStatus').innerHTML = `<i class="fas fa-check-circle"></i> USB: ${handle.name}`; await loadFromUSB(); }
+        });
+
+        // ========== GOOGLE DRIVE (FOLDER) ==========
+        let tokenClient = null, accessToken = null, driveAuth = false, driveClientId = '', driveApiKey = '';
+        function loadDriveConfig() {
+            driveClientId = localStorage.getItem('google_drive_client_id') || '';
+            driveApiKey = localStorage.getItem('google_drive_api_key') || '';
+            let savedToken = localStorage.getItem('gdrive_access_token');
+            if(savedToken) { accessToken = savedToken; driveAuth = true; }
+            updateDriveButtons();
+            if(driveAuth && navigator.onLine) autoSync();
+        }
+        function updateDriveButtons() {
+            let hasConfig = !!(driveClientId && driveApiKey);
+            document.getElementById('loginDriveBtn').disabled = !hasConfig || driveAuth;
+            document.getElementById('syncDriveBtn').disabled = !hasConfig || !driveAuth;
+            document.getElementById('uploadDriveBtn').disabled = !hasConfig || !driveAuth;
+            let statusDiv = document.getElementById('driveStatus');
+            if(!hasConfig) statusDiv.innerHTML = '⚠️ API belum dikonfigurasi';
+            else if(!driveAuth) statusDiv.innerHTML = '🔑 Belum login ke Google Drive';
+            else statusDiv.innerHTML = '✅ Terhubung ke Drive (folder DivisiBahasa)';
+        }
+        function initializeGIS() {
+            if(!driveClientId) return;
+            if(typeof google === 'undefined' || !google.accounts) return;
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: driveClientId,
+                scope: 'https://www.googleapis.com/auth/drive.file',
+                callback: (resp) => {
+                    if(resp.error) { console.error(resp); driveAuth=false; accessToken=null; localStorage.removeItem('gdrive_access_token'); updateDriveButtons(); return; }
+                    accessToken = resp.access_token;
+                    driveAuth = true;
+                    localStorage.setItem('gdrive_access_token', accessToken);
+                    updateDriveButtons();
+                    if(navigator.onLine) autoSync();
+                }
+            });
+        }
+        function requestAccessToken() { if(tokenClient) tokenClient.requestAccessToken(); else alert('Konfigurasi API dulu'); }
+
+        async function getOrCreateDriveFolder(folderName) {
+            if (!accessToken) throw new Error('Belum login');
+            let query = `name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+            let resp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            });
+            let data = await resp.json();
+            if (data.files && data.files.length > 0) return data.files[0].id;
+            let metadata = { name: folderName, mimeType: 'application/vnd.google-apps.folder' };
+            let createResp = await fetch('https://www.googleapis.com/drive/v3/files', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(metadata)
+            });
+            let folder = await createResp.json();
+            if (!folder.id) throw new Error('Gagal membuat folder');
+            return folder.id;
+        }
+
+        async function uploadToDrive(fileName, data, folderName = null) {
+            if (!accessToken) throw new Error('Belum login');
+            let parentId = folderName ? await getOrCreateDriveFolder(folderName) : null;
+            const fileBlob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const metadata = { name: fileName };
+            if (parentId) metadata.parents = [parentId];
+            const form = new FormData();
+            form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+            form.append('file', fileBlob);
+            const resp = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${accessToken}` },
+                body: form
+            });
+            if (!resp.ok) throw new Error(await resp.text());
+            return true;
+        }
+
+        async function downloadFromDrive(fileName, folderName = null) {
+            if (!accessToken) throw new Error('Belum login');
+            let query = `name='${fileName}' and trashed=false`;
+            if (folderName) {
+                let folderQuery = `name='${folderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+                let folderResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(folderQuery)}&fields=files(id)`, {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+                let folderData = await folderResp.json();
+                if (!folderData.files || folderData.files.length === 0) return null;
+                const folderId = folderData.files[0].id;
+                query = `name='${fileName}' and '${folderId}' in parents and trashed=false`;
+            }
+            const listResp = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            });
+            const listData = await listResp.json();
+            if (!listData.files || listData.files.length === 0) return null;
+            const fileId = listData.files[0].id;
+            const downloadResp = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                headers: { 'Authorization': `Bearer ${accessToken}` }
+            });
+            if (!downloadResp.ok) return null;
+            return await downloadResp.json();
+        }
+
+        async function autoSync() {
+            if(!driveAuth) return;
+            document.getElementById('driveStatus').innerHTML = '🔄 Menyinkronkan dari Drive...';
+            try {
+                let rew = await downloadFromDrive(FILE_REWARD, DRIVE_FOLDER_NAME);
+                if(rew) { records = rew; saveRecords(); renderTable(); }
+                document.getElementById('driveStatus').innerHTML = '✅ Data dari Drive dimuat';
+            } catch(e) { document.getElementById('driveStatus').innerHTML = '❌ Gagal sinkron: '+e.message; }
+        }
+
+        document.getElementById('configDriveBtn').addEventListener('click', () => {
+            let id = prompt('Client ID', driveClientId);
+            let key = prompt('API Key', driveApiKey);
+            if(id) driveClientId = id.trim();
+            if(key) driveApiKey = key.trim();
+            localStorage.setItem('google_drive_client_id', driveClientId);
+            localStorage.setItem('google_drive_api_key', driveApiKey);
+            accessToken = null; driveAuth = false; tokenClient = null; localStorage.removeItem('gdrive_access_token');
+            if(driveClientId) initializeGIS();
+            updateDriveButtons();
+        });
+        document.getElementById('loginDriveBtn').addEventListener('click', () => { if(driveClientId) { if(!tokenClient) initializeGIS(); requestAccessToken(); } else alert('Konfigurasi API dulu'); });
+        document.getElementById('syncDriveBtn').addEventListener('click', async () => {
+            if(!driveAuth) return alert('Login dulu');
+            document.getElementById('driveStatus').innerHTML = '🔄 Mengambil dari Drive...';
+            try {
+                let rew = await downloadFromDrive(FILE_REWARD, DRIVE_FOLDER_NAME);
+                if(rew) { records = rew; saveRecords(); renderTable(); document.getElementById('driveStatus').innerHTML = '✅ Sinkron selesai'; alert('Data dari Drive berhasil diambil'); }
+                else { document.getElementById('driveStatus').innerHTML = '⚠️ File tidak ditemukan di Drive'; alert('Tidak ada file reward di Drive'); }
+            } catch(e) { document.getElementById('driveStatus').innerHTML = '❌ Gagal: '+e.message; }
+        });
+        document.getElementById('uploadDriveBtn').addEventListener('click', async () => {
+            if(!driveAuth) return alert('Login dulu');
+            document.getElementById('driveStatus').innerHTML = '📤 Mengunggah ke Drive...';
+            try {
+                await uploadToDrive(FILE_REWARD, records, DRIVE_FOLDER_NAME);
+                document.getElementById('driveStatus').innerHTML = '✅ Upload berhasil';
+                alert('Data reward lokal berhasil diunggah ke Drive');
+            } catch(e) { document.getElementById('driveStatus').innerHTML = '❌ Gagal: '+e.message; }
+        });
+
+        // ========== FILTER EVENT ==========
+        document.getElementById('search_name').addEventListener('input', () => { currentPage = 1; renderTable(); });
+        document.getElementById('filterKelas').addEventListener('change', () => { currentPage = 1; renderTable(); });
+        document.getElementById('minRepeat').addEventListener('change', () => { currentPage = 1; renderTable(); });
+        document.getElementById('refreshFilterBtn').addEventListener('click', () => { document.getElementById('search_name').value = ''; document.getElementById('filterKelas').value = ''; document.getElementById('minRepeat').value = '4'; currentPage = 1; renderTable(); });
+        document.getElementById('prevPageBtn').addEventListener('click', () => { if(currentPage>1) { currentPage--; renderTable(); } });
+        document.getElementById('nextPageBtn').addEventListener('click', () => { if(currentPage < Math.ceil(filteredRecords.length/itemsPerPage)) { currentPage++; renderTable(); } });
+        function initKelasFilter() { let kelasSet = new Set(records.map(r => r.kelas).filter(k=>k)); let filter = document.getElementById('filterKelas'); filter.innerHTML = '<option value="">Semua Kelas</option>'; [...kelasSet].sort().forEach(k => filter.appendChild(new Option(k,k))); }
+        initKelasFilter();
+        document.getElementById('inp_tanggal').value = new Date().toISOString().slice(0,10);
+        renderTable();
+        loadDriveConfig();
+        if(driveClientId) initializeGIS();
+        if(usbFileManager.isSupported() && usbFileManager.getRootHandle) {
+            usbFileManager.getRootHandle().then(h => { if(h) { document.getElementById('folderStatus').innerHTML = `<i class="fas fa-check-circle"></i> USB: ${h.name}`; loadFromUSB(); } });
+        }
+    })();
+</script>
+</body>
+</html>

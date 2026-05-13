@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilih Divisi | Superadmin | Jam'iyyah Tholabah</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fefcf5;
+            color: #1e2a3a;
+            transition: background 0.3s, color 0.3s;
+        }
+        /* Dark mode */
+        body.dark-mode {
+            background: #121212;
+            color: #f0f0f0;
+        }
+        body.dark-mode .navbar {
+            background: rgba(18, 18, 18, 0.96);
+            border-bottom: 1px solid #2a2a3a;
+        }
+        body.dark-mode .navbar-brand {
+            background: linear-gradient(135deg, #b9aaff, #8b7bdd);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.dark-mode .nav-link {
+            color: #cbd5e6;
+        }
+        body.dark-mode .nav-link:hover, body.dark-mode .nav-link.active {
+            color: #b9aaff;
+        }
+        body.dark-mode .card-divisi {
+            background: #1e2a3a;
+            border-color: #334152;
+        }
+        body.dark-mode .text-muted, body.dark-mode small {
+            color: #c0c0c0 !important;
+        }
+        body.dark-mode .footer {
+            background: #0a0a12;
+            border-top-color: #1e293b;
+        }
+        body.dark-mode .clock {
+            background: #2a2a3a;
+            color: #f0f0f0;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 0.8rem 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #5e4bcc, #b7abff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: #2d3a4b;
+            margin: 0 0.25rem;
+            transition: 0.2s;
+        }
+        .nav-link.active {
+            color: #8b7bdd !important;
+        }
+        .clock {
+            font-size: 0.85rem;
+            background: #f0edff;
+            padding: 0.3rem 0.9rem;
+            border-radius: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        /* Card Divisi */
+        .card-divisi {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #f0edf5;
+            height: 100%;
+        }
+        .card-divisi:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 28px rgba(0,0,0,0.1);
+        }
+        .divisi-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #8b7bdd;
+        }
+        .divisi-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .divisi-desc {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        body.dark-mode .divisi-desc {
+            color: #adb5bd;
+        }
+        .footer {
+            background: #fefcff;
+            border-top: 1px solid #e9e6f5;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-size: 0.8rem;
+        }
+        .floating-dark-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #f0edff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: 0.2s;
+        }
+        body.dark-mode .floating-dark-btn {
+            background: #2a2a3a;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .navbar-brand { font-size: 1.2rem; }
+            .divisi-icon { font-size: 2.5rem; }
+            .divisi-name { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar sama seperti dashboard superadmin -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="../index.html">Jam'iyyah Tholabah</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="pusat_pelanggaran.html">Pelanggaran</a></li>
+                <li class="nav-item"><a class="nav-link" href="pusat_reward.html">Reward</a></li>
+                <li class="nav-item"><a class="nav-link" href="pusat_pengajuan.html">Pengajuan</a></li>
+                <li class="nav-item"><a class="nav-link" href="daftar_santri.html">Absen</a></li>
+                <li class="nav-item"><a class="nav-link active" href="pilih_divisi.html">Landing</a></li>
+                <li class="nav-item"><a class="nav-link" href="../divisi/bahasa/tentang.html">Tentang</a></li>
+            </ul>
+            <div class="d-flex gap-2 align-items-center">
+                <div class="clock me-2">
+                    <i class="far fa-clock"></i>
+                    <span id="jamIndo">--:--:--</span>
+                </div>
+                <a href="../login.html" class="btn btn-sm btn-outline-primary" onclick="logout()">Keluar</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Pilih Divisi</h2>
+        <p class="text-muted">Akses pusat data masing‑masing divisi</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Divisi Bahasa -->
+        <div class="col-md-4 col-sm-6">
+            <div class="card-divisi" onclick="window.location.href='../divisi/bahasa/pusat_data.html'">
+                <div class="divisi-icon"><i class="fas fa-language"></i></div>
+                <div class="divisi-name">Divisi Bahasa</div>
+                <div class="divisi-desc">Kelola pelanggaran, reward, dan data santri</div>
+            </div>
+        </div>
+        <!-- Divisi Ibadah -->
+        <div class="col-md-4 col-sm-6">
+            <div class="card-divisi" onclick="window.location.href='../divisi/ibadah/pusat_data.html'">
+                <div class="divisi-icon"><i class="fas fa-pray"></i></div>
+                <div class="divisi-name">Divisi Ibadah</div>
+                <div class="divisi-desc">Kelola pelanggaran, reward, dan data santri</div>
+            </div>
+        </div>
+        <!-- Divisi Fann -->
+        <div class="col-md-4 col-sm-6">
+            <div class="card-divisi" onclick="window.location.href='../divisi/fann/pusat_data.html'">
+                <div class="divisi-icon"><i class="fas fa-palette"></i></div>
+                <div class="divisi-name">Divisi Fann</div>
+                <div class="divisi-desc">Kelola pelanggaran, reward, dan data santri</div>
+            </div>
+        </div>
+        <!-- Divisi Konsumsi -->
+        <div class="col-md-4 col-sm-6">
+            <div class="card-divisi" onclick="window.location.href='../divisi/konsumsi/pusat_data.html'">
+                <div class="divisi-icon"><i class="fas fa-utensils"></i></div>
+                <div class="divisi-name">Divisi Konsumsi</div>
+                <div class="divisi-desc">Kelola pelanggaran, reward, dan data santri</div>
+            </div>
+        </div>
+        <!-- Divisi Kebersihan -->
+        <div class="col-md-4 col-sm-6">
+            <div class="card-divisi" onclick="window.location.href='../divisi/kebersihan/pusat_data.html'">
+                <div class="divisi-icon"><i class="fas fa-broom"></i></div>
+                <div class="divisi-name">Divisi Kebersihan</div>
+                <div class="divisi-desc">Kelola pelanggaran, reward, dan data santri</div>
+            </div>
+        </div>
+        <!-- Divisi Olahraga -->
+        <div class="col-md-4 col-sm-6">
+            <div class="card-divisi" onclick="window.location.href='../divisi/olahraga/pusat_data.html'">
+                <div class="divisi-icon"><i class="fas fa-futbol"></i></div>
+                <div class="divisi-name">Divisi Olahraga</div>
+                <div class="divisi-desc">Kelola pelanggaran, reward, dan data santri</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <span>© LEGION 8.0 | Jam'iyyah Tholabah - Superadmin Landing</span><br>
+        <small class="text-muted">Pilih divisi untuk mengelola data</small>
+    </div>
+</footer>
+
+<button id="floatingDarkBtn" class="floating-dark-btn"><i class="fas fa-moon"></i> Mode</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ========== DARK MODE ==========
+    const darkBtn = document.getElementById('floatingDarkBtn');
+    const isDark = localStorage.getItem('darkMode') === 'true';
+    if (isDark) {
+        document.body.classList.add('dark-mode');
+        darkBtn.innerHTML = '<i class="fas fa-sun"></i> Light';
+    }
+    darkBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const dark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', dark);
+        darkBtn.innerHTML = dark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Mode';
+    });
+
+    // ========== JAM ==========
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('jamIndo').innerText = now.toLocaleTimeString('id-ID');
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ========== LOGOUT ==========
+    window.logout = function() {
+        if (confirm('Keluar dari akun?')) {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('rememberedUser');
+            localStorage.removeItem('divisi_aktif');
+            window.location.href = '../login.html';
+        }
+    };
+
+    // ========== OPSIONAL: CEK LOGIN SUPERADMIN ==========
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = '../login.html';
+    } else if (currentUser.role !== 'superadmin') {
+        alert('Akses ditolak. Halaman ini khusus superadmin.');
+        window.location.href = '../dashboard/index.html';
+    }
+</script>
+</body>
+</html>
