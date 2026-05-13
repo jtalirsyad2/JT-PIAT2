@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jam'iyyah Tholabah | Organisasi Santri Pesantren</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fefcf5;
+            color: #1e2a3a;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: #121212;
+            color: #f0f0f0;
+        }
+        body.dark-mode .navbar {
+            background: rgba(18, 18, 18, 0.96);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #2a2a3a;
+        }
+        body.dark-mode .navbar-brand {
+            background: linear-gradient(135deg, #b9aaff, #8b7bdd);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        body.dark-mode .nav-link {
+            color: #cbd5e6;
+        }
+        body.dark-mode .btn-outline-primary {
+            border-color: #8b7bdd;
+            color: #b9aaff;
+        }
+        body.dark-mode .btn-outline-primary:hover {
+            background: #8b7bdd;
+            color: white;
+        }
+        body.dark-mode .btn-primary {
+            background: #8b7bdd;
+        }
+        body.dark-mode .feature-card,
+        body.dark-mode .stat-card,
+        body.dark-mode .testimonial-card {
+            background: #1e2a3a;
+            border-color: #334152;
+            color: #e0e0e0;
+        }
+        body.dark-mode .feature-card p,
+        body.dark-mode .section-header p {
+            color: #adb5bd;
+        }
+        body.dark-mode .partners {
+            background: #1a1a2e;
+            border-color: #2a2a3a;
+        }
+        body.dark-mode .partner-item {
+            color: #9a9ac0;
+        }
+        body.dark-mode .hero-image {
+            background: linear-gradient(145deg, #2a2a3a, #1a1a2e);
+        }
+        body.dark-mode .footer {
+            background: #0a0a12;
+        }
+        body.dark-mode .cta-section {
+            background: linear-gradient(105deg, #5e4bcc, #7a6ecc);
+        }
+
+        /* Warna pastel */
+        :root {
+            --primary: #8b7bdd;
+            --primary-light: #b7abff;
+            --primary-dark: #5e4bcc;
+            --secondary: #ffb86b;
+            --text-dark: #1e2a3a;
+            --text-muted: #5b6e8c;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 1rem 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin: 0 0.25rem;
+            transition: 0.2s;
+        }
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+            border-radius: 2rem;
+            padding: 0.4rem 1.4rem;
+        }
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.8rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -8px rgba(91, 75, 204, 0.4);
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            background: #f0edff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        body.dark-mode .dark-mode-toggle {
+            background: #2a2a3a;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0 4rem;
+        }
+        .badge-pastel {
+            background: var(--primary-light);
+            color: white;
+            padding: 0.3rem 0.9rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            font-family: 'Playfair Display', serif;
+            color: var(--text-dark);
+        }
+        body.dark-mode .hero h1 {
+            color: #f0f0f0;
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
+        }
+        .hero-image {
+            border-radius: 2rem;
+            background: linear-gradient(145deg, #f0edff, #e9e6ff);
+            padding: 1rem;
+            text-align: center;
+        }
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 1.5rem;
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.8rem;
+        }
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Feature Cards - Efek Timbul & Klik */
+        .feature-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid #f0edf5;
+            height: 100%;
+            cursor: pointer;
+            position: relative;
+            transform: translateY(0);
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 35px -15px rgba(0,0,0,0.15);
+            border-color: var(--primary-light);
+        }
+        .feature-card:active {
+            transform: translateY(-2px);
+        }
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-light), #e0daff);
+            border-radius: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            transition: 0.2s;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.05);
+        }
+        .feature-icon i {
+            font-size: 2rem;
+            color: var(--primary-dark);
+        }
+        .feature-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Partners */
+        .partners {
+            background: white;
+            padding: 2rem 0;
+            border-top: 1px solid #edeef2;
+            border-bottom: 1px solid #edeef2;
+        }
+        .partner-item {
+            text-align: center;
+            font-weight: 600;
+            color: #6c7a91;
+            font-size: 1.1rem;
+            letter-spacing: -0.3px;
+        }
+        body.dark-mode .partner-item i {
+            color: #b9aaff;
+        }
+
+        /* Stat Cards */
+        .stat-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            border: 1px solid #f1eef7;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        /* Testimonial */
+        .testimonial-card {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.8rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.03);
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(105deg, var(--primary-light) 0%, var(--primary) 100%);
+            border-radius: 2rem;
+            padding: 3rem;
+            text-align: center;
+            color: white;
+        }
+        .cta-section h3 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .btn-light {
+            background: white;
+            color: var(--primary);
+            border-radius: 2rem;
+            padding: 0.7rem 2rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        .footer a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer a:hover {
+            color: white;
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: 1.5rem;
+            border: none;
+        }
+        body.dark-mode .modal-content {
+            background: #1e2a3a;
+            color: #f0f0f0;
+            border: 1px solid #334152;
+        }
+        body.dark-mode .modal-header {
+            border-bottom-color: #334152;
+        }
+        body.dark-mode .btn-close {
+            filter: invert(1);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+            .cta-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Jam'iyyah Tholabah</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="#tentang">Tentang</a></li>
+                <li class="nav-item"><a class="nav-link" href="#divisi">Divisi</a></li>
+                <li class="nav-item"><a class="nav-link" href="#layanan">Layanan</a></li>
+                <li class="nav-item"><a class="nav-link" href="#statistik">Statistik</a></li>
+                <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+            </ul>
+            <div class="d-flex gap-2 align-items-center">
+                <button id="darkModeToggle" class="dark-mode-toggle"><i class="fas fa-moon"></i> Mode</button>
+                <a href="login.html" class="btn btn-outline-primary">Login Divisi</a>
+                <a href="#kontak" class="btn btn-primary">Daftar</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="tentang">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="badge-pastel"><i class="fas fa-users me-1"></i> Organisasi Santri Modern</div>
+                <h1>Mengelola Program Divisi <br> Lebih Mudah & Bersinar</h1>
+                <p>Platform digital untuk seluruh divisi di lingkungan Jam'iyyah Tholabah. Kelola pelanggaran, reward, data santri, dan koordinasi antar divisi dalam satu ekosistem terintegrasi.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#divisi" class="btn btn-primary">Jelajahi Divisi <i class="fas fa-arrow-right ms-2"></i></a>
+                    <a href="login.html" class="btn btn-outline-primary">Akses Sistem</a>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                <div class="hero-image">
+                    <img src="https://placehold.co/600x400/e9e6ff/8b7bdd?text=Manajemen+Divisi+Terintegrasi" alt="Manajemen Divisi">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Bagian Divisi -->
+<section class="py-5" id="divisi">
+    <div class="container">
+        <div class="section-header">
+            <h2>🌟 Divisi Aktif Jam'iyyah Tholabah</h2>
+            <p>Klik pada setiap kartu divisi untuk mengetahui fungsi dan program kerjanya</p>
+        </div>
+        <div class="row g-4" id="divisiContainer">
+            <!-- Akan diisi JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- Modal Detail Divisi -->
+<div class="modal fade" id="divisiModal" tabindex="-1" aria-labelledby="divisiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="divisiModalLabel">Informasi Divisi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBodyFungsi"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <a href="login.html" class="btn btn-primary">Login ke Divisi</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Partners -->
+<div class="partners">
+    <div class="container">
+        <div class="section-header mb-3">
+            <h2 class="fs-4">Divisi yang Telah Bergabung</h2>
+        </div>
+        <div class="row g-4 justify-content-center" id="partnerContainer"></div>
+    </div>
+</div>
+
+<!-- Statistik -->
+<section class="py-5" id="statistik">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="badge-pastel mb-3"><i class="fas fa-chart-simple"></i> Optimasi Data</div>
+                <h2 class="fw-bold mb-3">Optimasi Tren & Temuan Divisi</h2>
+                <p class="text-muted">Dengan pendekatan data-driven, setiap divisi dapat melihat tren pelanggaran yang sering terjadi, reward terbanyak, serta performa pengurus secara berkala.</p>
+                <ul class="list-unstyled mt-4">
+                    <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Analisis per periode (harian, mingguan, bulanan)</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Deteksi dini masalah melalui grafik interaktif</li>
+                    <li class="mb-2"><i class="fas fa-check-circle text-primary me-2"></i> Rekomendasi perbaikan berdasarkan data historis</li>
+                </ul>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6"><div class="stat-card"><div class="stat-number">6+</div><div>Divisi Aktif</div></div></div>
+                    <div class="col-6"><div class="stat-card"><div class="stat-number">1.200+</div><div>Santri Terdaftar</div></div></div>
+                    <div class="col-6"><div class="stat-card"><div class="stat-number">98%</div><div>Kepuasan Pengurus</div></div></div>
+                    <div class="col-6"><div class="stat-card"><div class="stat-number">24/7</div><div>Akses Online</div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Layanan Unggulan -->
+<section class="py-5" id="layanan">
+    <div class="container">
+        <div class="section-header">
+            <h2>✨ Layanan Unggulan</h2>
+            <p>Fitur canggih untuk mendukung kinerja setiap divisi</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card" style="cursor:default;">
+                    <div class="feature-icon"><i class="fas fa-chalkboard-user"></i></div>
+                    <h4>Manajemen Divisi</h4>
+                    <p>Setiap divisi memiliki ruang data sendiri, terisolasi dan aman.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card" style="cursor:default;">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h4>Statistik Real-time</h4>
+                    <p>Pantau grafik pelanggaran dan reward per divisi secara langsung.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card" style="cursor:default;">
+                    <div class="feature-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                    <h4>Sinkron Google Drive</h4>
+                    <p>Data tersimpan otomatis ke cloud, akses dari mana saja.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card" style="cursor:default;">
+                    <div class="feature-icon"><i class="fas fa-file-excel"></i></div>
+                    <h4>Ekspor Laporan</h4>
+                    <p>Download data ke CSV, XLSX, atau cetak langsung.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card" style="cursor:default;">
+                    <div class="feature-icon"><i class="fas fa-keyboard"></i></div>
+                    <h4>Keyboard Arab</h4>
+                    <p>Fasilitas khusus divisi bahasa untuk mengetik huruf Arab.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card" style="cursor:default;">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h4>Privasi & Keamanan</h4>
+                    <p>Data setiap divisi hanya diakses oleh anggota yang ditunjuk.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial -->
+<section class="py-4">
+    <div class="container">
+        <div class="testimonial-card">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center">
+                    <i class="fas fa-quote-left fa-3x text-primary opacity-50"></i>
+                </div>
+                <div class="col-md-10">
+                    <p class="mb-2 fst-italic">"Platform ini sangat membantu kami di Divisi Bahasa. Pencatatan pelanggaran menjadi lebih tertib, dan laporan bulanan bisa langsung di-export ke Excel."</p>
+                    <div><strong>Ust. Suharmin Muslimin, M.Pd</strong> — Pembina Divisi Bahasa</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5">
+    <div class="container">
+        <div class="cta-section">
+            <h3>Siap Mengelola Divisi Lebih Baik?</h3>
+            <p class="mb-4 opacity-75">Daftarkan divisi Anda sekarang dan rasakan kemudahan sistem terintegrasi.</p>
+            <a href="#kontak" class="btn btn-light">Hubungi Kami <i class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="kontak">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5 class="text-white mb-3">Jam'iyyah Tholabah</h5>
+                <p class="small">Organisasi santri modern yang fokus pada pengembangan soft skill dan kepemimpinan melalui divisi-divisi aktif.</p>
+            </div>
+            <div class="col-md-2 mb-4">
+                <h6 class="text-white">Tautan</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#tentang">Tentang</a></li>
+                    <li><a href="#divisi">Divisi</a></li>
+                    <li><a href="#layanan">Layanan</a></li>
+                    <li><a href="login.html">Login Divisi</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="text-white">Kontak</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="fas fa-envelope me-2"></i> jamiyyah@pesantren.sch.id</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +62 812 3456 7890</li>
+                    <li><i class="fas fa-map-marker-alt me-2"></i> Jl. Pesantren No.1, Jawa Timur</li>
+                </ul>
+            </div>
+            <div class="col-md-3 mb-4">
+                <h6 class="text-white">Ikuti Kami</h6>
+                <div class="d-flex gap-3">
+                    <a href="#"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-youtube fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-github fa-lg"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-3 opacity-25">
+        <div class="text-center small">
+            © 2025 Jam'iyyah Tholabah — Mengabdi untuk Santri, Berkah untuk Negeri
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Data divisi sesuai dengan struktur multi-divisi
+    const divisiList = [
+        { id: "bahasa", nama: "Divisi Bahasa", ikon: "fa-language", warna: "#8b7bdd", 
+          fungsi: "Mengembangkan kemampuan bahasa Arab dan Inggris santri melalui program muhadhoroh, kajian kitab kuning, lomba debat, serta pendampingan tugas-tugas kebahasaan.",
+          program: ["Muhadhoroh mingguan", "Kajian Nahwu & Shorof", "Lomba Debat Bahasa", "Papan Kosa Kata Harian"] },
+        { id: "ibadah", nama: "Divisi Ibadah", ikon: "fa-pray", warna: "#4caf50",
+          fungsi: "Mengatur jadwal ibadah harian, kajian keagamaan, dan pembinaan spiritual santri.",
+          program: ["Jadwal Imam Shalat", "Kajian Rutin", "Tadarus Al-Quran", "Peringatan Hari Besar Islam"] },
+        { id: "fann", nama: "Divisi Fann", ikon: "fa-palette", warna: "#ff5722",
+          fungsi: "Mengembangkan bakat seni santri melalui kaligrafi, seni rupa, serta pentas seni tahunan.",
+          program: ["Pelatihan Kaligrafi", "Lukis & Desain", "Pentas Seni Santri", "Lomba Kreasi Seni"] },
+        { id: "konsumsi", nama: "Divisi Konsumsi", ikon: "fa-utensils", warna: "#ff9800",
+          fungsi: "Mengelola kebutuhan konsumsi santri, jadwal makan, dan kebersihan dapur.",
+          program: ["Jadwal Makan", "Pengelolaan Dapur", "Gizi Seimbang", "Pelatihan Memasak"] },
+        { id: "kebersihan", nama: "Divisi Kebersihan", ikon: "fa-broom", warna: "#2196f3",
+          fungsi: "Mengkoordinasi jadwal piket harian, pengelolaan sampah, serta penghijauan area pondok.",
+          program: ["Jadwal Piket Kamar", "Penghijauan Halaman", "Lomba Kebersihan", "Bank Sampah"] },
+        { id: "olahraga", nama: "Divisi Olahraga", ikon: "fa-futbol", warna: "#e91e63",
+          fungsi: "Membina bakat olahraga santri, mengadakan turnamen antar kelas, serta memelihara sarana olahraga.",
+          program: ["Turnamen Futsal", "Lomba Bulutangkis", "Pembinaan Atlet Muda", "Jalan Sehat Bersama"] }
+    ];
+
+    // Render kartu divisi
+    const container = document.getElementById('divisiContainer');
+    divisiList.forEach(divisi => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4';
+        col.innerHTML = `
+            <div class="feature-card" data-divisi="${divisi.id}" data-nama="${divisi.nama}" data-fungsi="${divisi.fungsi.replace(/"/g, '&quot;')}" data-program='${JSON.stringify(divisi.program)}'>
+                <div class="feature-icon"><i class="fas ${divisi.ikon}"></i></div>
+                <h4>${divisi.nama}</h4>
+                <p>${divisi.fungsi.substring(0, 100)}...</p>
+            </div>
+        `;
+        container.appendChild(col);
+    });
+
+    // Event klik pada kartu divisi
+    document.querySelectorAll('.feature-card[data-divisi]').forEach(card => {
+        card.addEventListener('click', function(e) {
+            const nama = this.dataset.nama;
+            const fungsi = this.dataset.fungsi;
+            const program = JSON.parse(this.dataset.program);
+            
+            let programList = '<ul class="mt-3">';
+            program.forEach(p => {
+                programList += `<li><i class="fas fa-check-circle text-primary me-2"></i> ${p}</li>`;
+            });
+            programList += '</ul>';
+            
+            document.getElementById('modalBodyFungsi').innerHTML = `
+                <h4><i class="fas ${this.querySelector('.feature-icon i').className} me-2"></i> ${nama}</h4>
+                <p>${fungsi}</p>
+                <hr>
+                <strong>Program Unggulan:</strong>
+                ${programList}
+            `;
+            const modal = new bootstrap.Modal(document.getElementById('divisiModal'));
+            modal.show();
+        });
+    });
+
+    // Render partner (6 divisi)
+    const partnerContainer = document.getElementById('partnerContainer');
+    divisiList.forEach(divisi => {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-2 partner-item';
+        col.innerHTML = `<i class="fas ${divisi.ikon} me-2"></i> ${divisi.nama}`;
+        partnerContainer.appendChild(col);
+    });
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+    }
+    darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Mode';
+    });
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === "#" || href === "") return;
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+</body>
+</html>
