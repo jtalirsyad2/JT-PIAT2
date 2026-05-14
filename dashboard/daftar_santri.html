@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Santri | Jam'iyyah Tholabah</title>
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome 6 -->
+    <!-- Font Awesome 6 CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- SheetJS -->
+    <!-- SheetJS CDN -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,13 +18,15 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Inter', sans-serif;
             background: #fefcf5;
             color: #1e2a3a;
-            transition: background 0.3s, color 0.3s;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        /* Dark mode */
+
+        /* Dark Mode Global - Kontras Tinggi */
         body.dark-mode {
             background: #121212;
             color: #f0f0f0;
@@ -44,14 +46,46 @@
         body.dark-mode .nav-link:hover, body.dark-mode .nav-link.active {
             color: #b9aaff;
         }
-        body.dark-mode .card, 
-        body.dark-mode .table-container,
-        body.dark-mode .modal-content {
-            background: #1e2a3a;
-            border-color: #334152;
+        body.dark-mode .btn-outline-primary {
+            border-color: #8b7bdd;
+            color: #b9aaff;
         }
-        body.dark-mode .text-muted, 
-        body.dark-mode small {
+        body.dark-mode .btn-outline-primary:hover {
+            background: #8b7bdd;
+            color: white;
+        }
+        body.dark-mode .btn-primary {
+            background: #8b7bdd;
+            border-color: #8b7bdd;
+        }
+        /* Card dan tabel - gelap total */
+        body.dark-mode .card,
+        body.dark-mode .modal-content {
+            background: #1e2a3a !important;
+            border-color: #334152 !important;
+            color: #f0f0f0 !important;
+        }
+        /* Tabel gelap dengan teks putih kontras */
+        body.dark-mode .table,
+        body.dark-mode .table tbody,
+        body.dark-mode .table tr,
+        body.dark-mode .table td,
+        body.dark-mode .table th {
+            background-color: #1e1e2e !important;
+            color: #f0f0f0 !important;
+            border-color: #3a4a5a !important;
+        }
+        body.dark-mode .table thead th {
+            background-color: #2a2a3a !important;
+            color: #ffffff !important;
+            border-color: #4a5a6a !important;
+        }
+        body.dark-mode .table-hover tbody tr:hover td,
+        body.dark-mode .table-hover tbody tr:hover th {
+            background-color: #2a2a3a !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .text-muted {
             color: #c0c0c0 !important;
         }
         body.dark-mode .footer {
@@ -62,26 +96,68 @@
             background: #2a2a3a;
             color: #f0f0f0;
         }
-        body.dark-mode .btn-outline-primary {
-            border-color: #8b7bdd;
-            color: #b9aaff;
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background: #2a2a3a;
+            border-color: #4a5a6a;
+            color: #f0f0f0;
         }
-        body.dark-mode .btn-outline-primary:hover {
-            background: #8b7bdd;
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
+            background: #2a2a3a;
+            color: #f0f0f0;
+        }
+        body.dark-mode .btn-close {
+            filter: invert(1);
+        }
+        body.dark-mode .badge.bg-light {
+            background-color: #2a2a3a !important;
+            color: #f0f0f0 !important;
+        }
+        /* Badge kelas di mode gelap tetap kontras */
+        body.dark-mode .kelas-badge {
+            color: #f0f0f0;
+        }
+        .kelas-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .kelas-vii { background: #e3f2fd; color: #0d47a1; }
+        .kelas-viii { background: #e8f5e9; color: #1e5e2e; }
+        .kelas-ix { background: #fff3e0; color: #b75d0a; }
+        .kelas-il { background: #e0f7fa; color: #006064; }
+        .kelas-x { background: #ede7f6; color: #512da8; }
+        .kelas-xi { background: #fbe9e7; color: #bf360c; }
+        .kelas-xii { background: #ffebee; color: #b71c1c; }
+        body.dark-mode .kelas-vii { background: #1a3a5c; color: #90caf9; }
+        body.dark-mode .kelas-viii { background: #1a4a2a; color: #a5d6a7; }
+        body.dark-mode .kelas-ix { background: #5a3a1a; color: #ffcc80; }
+        body.dark-mode .kelas-il { background: #1a5a5a; color: #80deea; }
+        body.dark-mode .kelas-x { background: #2a1a5a; color: #b39ddb; }
+        body.dark-mode .kelas-xi { background: #5a1a1a; color: #ffab91; }
+        body.dark-mode .kelas-xii { background: #5a1a2a; color: #ef9a9a; }
+
+        /* Floating Dark Mode Button */
+        .floating-dark-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #f0edff;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: 0.2s;
+        }
+        body.dark-mode .floating-dark-btn {
+            background: #2a2a3a;
             color: white;
-        }
-        body.dark-mode .table {
-            color: #f0f0f0;
-        }
-        body.dark-mode .table-light {
-            background-color: #2a2a3a;
-            color: #f0f0f0;
-        }
-        body.dark-mode .table-bordered {
-            border-color: #334152;
-        }
-        body.dark-mode .table th:hover {
-            background-color: rgba(255,255,255,0.1);
         }
         /* Navbar */
         .navbar {
@@ -116,66 +192,13 @@
             align-items: center;
             gap: 0.5rem;
         }
-        /* Statistik ringkas */
-        .stat-card {
-            background: white;
-            border-radius: 1.2rem;
-            padding: 1rem 1.5rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid #f0edf5;
-        }
         .stat-number {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
         }
-        /* Badge kelas */
-        .kelas-badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-        .kelas-vii { background: #e3f2fd; color: #0d47a1; }
-        .kelas-viii { background: #e8f5e9; color: #1e5e2e; }
-        .kelas-ix { background: #fff3e0; color: #b75d0a; }
-        .kelas-il { background: #e0f7fa; color: #006064; }
-        .kelas-x { background: #ede7f6; color: #512da8; }
-        .kelas-xi { background: #fbe9e7; color: #bf360c; }
-        .kelas-xii { background: #ffebee; color: #b71c1c; }
-        body.dark-mode .kelas-vii { background: #1a3a5c; color: #90caf9; }
-        body.dark-mode .kelas-viii { background: #1a4a2a; color: #a5d6a7; }
-        body.dark-mode .kelas-ix { background: #5a3a1a; color: #ffcc80; }
-        body.dark-mode .kelas-il { background: #1a5a5a; color: #80deea; }
-        body.dark-mode .kelas-x { background: #2a1a5a; color: #b39ddb; }
-        body.dark-mode .kelas-xi { background: #5a1a1a; color: #ffab91; }
-        body.dark-mode .kelas-xii { background: #5a1a2a; color: #ef9a9a; }
-        /* Table header sort */
         .table th {
             cursor: pointer;
             user-select: none;
-        }
-        .table th:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        /* Floating dark mode */
-        .floating-dark-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #f0edff;
-            border: none;
-            border-radius: 2rem;
-            padding: 0.5rem 1.2rem;
-            cursor: pointer;
-            font-weight: 500;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        body.dark-mode .floating-dark-btn {
-            background: #2a2a3a;
-            color: white;
         }
         .footer {
             background: #fefcff;
@@ -187,13 +210,20 @@
         }
         @media (max-width: 768px) {
             .navbar-brand { font-size: 1.2rem; }
-            .stat-number { font-size: 1.4rem; }
+            .stat-number { font-size: 1.6rem; }
+        }
+        /* Pastel button styles */
+        .btn-pastel-primary, .btn-pastel-success, .btn-pastel-info, .btn-pastel-warning, .btn-pastel-danger {
+            transition: 0.2s;
+        }
+        .btn-pastel-primary:hover, .btn-pastel-success:hover, .btn-pastel-info:hover, .btn-pastel-warning:hover, .btn-pastel-danger:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 
-<!-- Navbar atas -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="../index.html">Jam'iyyah Tholabah</a>
@@ -219,9 +249,10 @@
     </div>
 </nav>
 
+<!-- Main Content -->
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-semibold"><i class="fas fa-users me-2"></i>Daftar Santri</h3>
+        <h3 class="fw-semibold">Daftar Santri</h3>
         <div class="text-muted small">Total <span id="totalCount">0</span> santri terdaftar</div>
     </div>
 
@@ -259,7 +290,7 @@
     </div>
 
     <!-- Tabel -->
-    <div class="card">
+    <div class="card p-0">
         <div class="table-responsive">
             <table class="table table-bordered table-hover mb-0">
                 <thead class="table-light">
@@ -287,7 +318,7 @@
         </div>
     </div>
 
-    <!-- Card Rombak Absen (modal style) -->
+    <!-- Card Rombak Absen -->
     <div id="absenCard" class="card mt-4" style="display:none;">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="fas fa-calendar-check"></i> Rombak Absen</h5>
@@ -314,17 +345,19 @@
     </div>
 </div>
 
+<!-- Footer -->
 <footer class="footer">
     <div class="container">
         <span>© LEGION 8.0 | Jam'iyyah Tholabah - Manajemen Santri</span>
     </div>
 </footer>
 
+<!-- Floating Dark Mode Button -->
 <button id="floatingDarkBtn" class="floating-dark-btn"><i class="fas fa-moon"></i> Mode</button>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ========== DARK MODE & JAM ==========
+    // ========== DARK MODE ==========
     const darkBtn = document.getElementById('floatingDarkBtn');
     const isDark = localStorage.getItem('darkMode') === 'true';
     if (isDark) {
@@ -338,6 +371,7 @@
         darkBtn.innerHTML = dark ? '<i class="fas fa-sun"></i> Light' : '<i class="fas fa-moon"></i> Mode';
     });
 
+    // ========== JAM ==========
     function updateClock() {
         const now = new Date();
         document.getElementById('jamIndo').innerText = now.toLocaleTimeString('id-ID');
@@ -355,7 +389,7 @@
         }
     };
 
-    // ========== DATA SANTRI ==========
+    // ========== DATA SANTRI (ambil dari localStorage santri_data.json atau santri_data) ==========
     let studentsData = [];
     let currentPage = 1;
     let itemsPerPage = 50;
@@ -364,46 +398,50 @@
     let sortAsc = true;
     const kelasOrder = { 'VII':1, 'VIII':2, 'IX':3, 'IL':4, 'X':5, 'XI':6, 'XII':7 };
 
-    // Load data dari localStorage atau default dari students-data.js
-    function loadDefaultSantri() {
-        fetch('../src/students-data.js')
-            .then(res => res.text())
-            .then(text => {
-                eval(text);
-                if (typeof students !== 'undefined' && students.length) {
-                    studentsData = students;
-                    localStorage.setItem('santri_data', JSON.stringify(studentsData));
-                } else {
-                    studentsData = [];
+    async function loadSantriData() {
+        // Prioritas 1: localStorage dengan key 'santri_data.json'
+        let data = localStorage.getItem('santri_data.json');
+        if (data) {
+            try {
+                let parsed = JSON.parse(data);
+                if (Array.isArray(parsed) && parsed.length) {
+                    studentsData = parsed;
+                    return;
                 }
-                init();
-            })
-            .catch(() => { studentsData = []; init(); });
-    }
-
-    const stored = localStorage.getItem('santri_data');
-    if (stored && stored !== '[]') {
+            } catch(e) {}
+        }
+        // Prioritas 2: localStorage dengan key 'santri_data'
+        data = localStorage.getItem('santri_data');
+        if (data) {
+            try {
+                let parsed = JSON.parse(data);
+                if (Array.isArray(parsed) && parsed.length) {
+                    studentsData = parsed;
+                    return;
+                }
+            } catch(e) {}
+        }
+        // Prioritas 3: fallback dari students-data.js
         try {
-            studentsData = JSON.parse(stored);
-            init();
-        } catch(e) { loadDefaultSantri(); }
-    } else {
-        loadDefaultSantri();
-    }
-
-    function init() {
-        initKelasFilter();
-        renderTable();
-        attachEvents();
+            const resp = await fetch('../src/students-data.js');
+            const text = await resp.text();
+            eval(text);
+            if (typeof students !== 'undefined' && students.length) {
+                studentsData = students;
+                return;
+            }
+        } catch(e) {}
+        // Fallback terakhir
+        studentsData = [];
     }
 
     function initKelasFilter() {
         let kelasSet = new Set(studentsData.map(s => s.kelas));
         let options = [...kelasSet].sort((a,b) => {
-            let aOrd = kelasOrder[a.split(' ')[0]] || 999;
-            let bOrd = kelasOrder[b.split(' ')[0]] || 999;
+            let aOrd = kelasOrder[a?.split(' ')[0]] || 999;
+            let bOrd = kelasOrder[b?.split(' ')[0]] || 999;
             if (aOrd !== bOrd) return aOrd - bOrd;
-            return a.localeCompare(b);
+            return (a || '').localeCompare(b || '');
         });
         let filter = document.getElementById('kelasFilter');
         filter.innerHTML = '<option value="">Semua Kelas</option>';
@@ -414,23 +452,45 @@
         let result = [...studentsData];
         let searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
         if (searchTerm) {
-            result = result.filter(s => s.name.toLowerCase().includes(searchTerm) || s.nis.includes(searchTerm));
+            result = result.filter(s => (s.name || '').toLowerCase().includes(searchTerm) || (s.nis || '').includes(searchTerm));
         }
         let kelasVal = document.getElementById('kelasFilter').value;
         if (kelasVal) result = result.filter(s => s.kelas === kelasVal);
         if (sortColumn === 'nama') {
-            result.sort((a,b) => sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+            result.sort((a,b) => sortAsc ? (a.name || '').localeCompare(b.name || '') : (b.name || '').localeCompare(a.name || ''));
         } else if (sortColumn === 'nis') {
-            result.sort((a,b) => sortAsc ? a.nis.localeCompare(b.nis) : b.nis.localeCompare(a.nis));
+            result.sort((a,b) => sortAsc ? (a.nis || '').localeCompare(b.nis || '') : (b.nis || '').localeCompare(a.nis || ''));
         } else if (sortColumn === 'kelas') {
             result.sort((a,b) => {
-                let aOrd = kelasOrder[a.kelas.split(' ')[0]] || 999;
-                let bOrd = kelasOrder[b.kelas.split(' ')[0]] || 999;
+                let aOrd = kelasOrder[a.kelas?.split(' ')[0]] || 999;
+                let bOrd = kelasOrder[b.kelas?.split(' ')[0]] || 999;
                 if (aOrd !== bOrd) return sortAsc ? aOrd - bOrd : bOrd - aOrd;
-                return sortAsc ? a.kelas.localeCompare(b.kelas) : b.kelas.localeCompare(a.kelas);
+                return sortAsc ? (a.kelas || '').localeCompare(b.kelas || '') : (b.kelas || '').localeCompare(a.kelas || '');
             });
         }
         return result;
+    }
+
+    function getKelasClass(k) {
+        if (!k) return '';
+        if (k.includes('VII')) return 'kelas-vii';
+        if (k.includes('VIII')) return 'kelas-viii';
+        if (k.includes('IX')) return 'kelas-ix';
+        if (k.includes('IL')) return 'kelas-il';
+        if (k.includes('X')) return 'kelas-x';
+        if (k.includes('XI')) return 'kelas-xi';
+        if (k.includes('XII')) return 'kelas-xii';
+        return '';
+    }
+
+    function escapeHtml(s) {
+        if (!s) return '';
+        return s.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
     function renderTable() {
@@ -453,8 +513,8 @@
                     <td class="text-center">${start + idx + 1}</td>
                     <td>${escapeHtml(s.nis)}</td>
                     <td>${escapeHtml(s.name)}</td>
-                    <td><span class="kelas-badge ${kelasClass}">${s.kelas}</span></td>
-                </tr>`;
+                    <td><span class="kelas-badge ${kelasClass}">${escapeHtml(s.kelas)}</span></td>
+                </td>`;
             });
         }
         document.getElementById('showingStart').textContent = total ? start + 1 : 0;
@@ -466,27 +526,7 @@
         document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
     }
 
-    function getKelasClass(k) {
-        if (k.includes('VII')) return 'kelas-vii';
-        if (k.includes('VIII')) return 'kelas-viii';
-        if (k.includes('IX')) return 'kelas-ix';
-        if (k.includes('IL')) return 'kelas-il';
-        if (k.includes('X')) return 'kelas-x';
-        if (k.includes('XI')) return 'kelas-xi';
-        if (k.includes('XII')) return 'kelas-xii';
-        return '';
-    }
-
-    function escapeHtml(s) {
-        if (!s) return '';
-        return s.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
+    // Ekspor & Rombak Absen
     function exportToXLSX(data, filename) {
         if (!data.length) { alert('Data kosong'); return; }
         const ws = XLSX.utils.json_to_sheet(data.map(s => ({ NIS: s.nis, Nama: s.name, Kelas: s.kelas })));
@@ -513,7 +553,7 @@
         exportToXLSX(data, `absen_santri_${new Date().toISOString().slice(0,10)}.xlsx`);
     }
 
-    // ========== ROMBAK ABSEN ==========
+    // Rombak Absen
     let importedData = null;
     const absenCard = document.getElementById('absenCard');
     const showAbsenBtn = document.getElementById('showAbsenBtn');
@@ -576,7 +616,7 @@
         if (!importedData) return;
         if (!confirm('Yakin ingin mengganti seluruh data santri? Data lama akan hilang.')) return;
         studentsData = importedData;
-        localStorage.setItem('santri_data', JSON.stringify(studentsData));
+        localStorage.setItem('santri_data.json', JSON.stringify(studentsData));
         initKelasFilter();
         renderTable();
         document.getElementById('importPreview').style.display = 'none';
@@ -588,7 +628,6 @@
         alert(`Berhasil mengganti dengan ${studentsData.length} santri.`);
     };
 
-    // ========== EVENT ==========
     function attachEvents() {
         document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; renderTable(); });
         document.getElementById('kelasFilter').addEventListener('change', () => { currentPage = 1; renderTable(); });
@@ -617,6 +656,14 @@
         currentPage = 1;
         renderTable();
     };
+
+    // ========== INISIALISASI ==========
+    (async function init() {
+        await loadSantriData();
+        initKelasFilter();
+        renderTable();
+        attachEvents();
+    })();
 </script>
 </body>
 </html>
